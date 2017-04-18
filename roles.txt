@@ -1,0 +1,5 @@
+Morgan - Engine Programmer
+Joey - Engine Programmer
+Joe Vig - Graphic Development
+Angelo - Map Design 
+Raghav - Gameplay Design 
