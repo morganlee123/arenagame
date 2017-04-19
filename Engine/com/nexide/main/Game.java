@@ -1,24 +1,48 @@
-package com.team1.main;
+package com.nexide.main;
 
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
+import com.nexide.main.gfx.ImageLoader;
+import com.nexide.main.gfx.ImageManager;
+import com.nexide.main.gfx.SpriteSheet;
+
 public class Game extends Canvas implements Runnable {
 	
-	private static String TITLE = "game best = asdkajslk";
+	private static String TITLE = "morgan is the best engine programmer ever";
 	private static int WIDTH = 1024, HEIGHT = 768;
 
 	private boolean running = false;
 	private Thread gameThread;
 	
+	private ImageManager im;
+	private SpriteSheet ss;
+	
+	private ImageLoader loader;
+	
+	private BufferedImage[] grasstiles;
+	
 	private void init(){
+		loader = new ImageLoader();
 		
+		ss = new SpriteSheet(loader.loadImage("res/spritesheets/spritesheet.png")); 
+		im = new ImageManager(ss);
+		
+		loadTextures();
+		
+		this.addKeyListener(new KeyManager());
 	}
 	
+	private void loadTextures() {
+		grasstiles = im.getTileset("grass");
+		
+	}
+
 	private synchronized void start(){
 		if(running)return;
 		
@@ -59,10 +83,9 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	private void tick(){
-		
+
 	}
 	
-	int x = 0, y = 10;
 	private void render(){
 		BufferStrategy bs = this.getBufferStrategy();
 		if(bs==null){
@@ -71,9 +94,8 @@ public class Game extends Canvas implements Runnable {
 		}
 		Graphics g = bs.getDrawGraphics();
 		//
-		g.clearRect(0, 0, this.getWidth(), this.getHeight());
 		
-		g.fillRect(x+=4,y, 64, 64);
+		g.drawImage(grasstiles[0], 0, 0, this);
 		
 		//
 		g.dispose();
