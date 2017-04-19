@@ -1,4 +1,4 @@
-package com.team1.main.gfx;
+package com.nexide.main.gfx;
 
 import java.awt.image.BufferedImage;
 
@@ -6,9 +6,8 @@ public class ImageManager {
 	
 	private SpriteSheet ss;
 	
-	
 	private int DEFAULT_TILESIZE = 16;
-	private BufferedImage image1;
+	private BufferedImage[] grassTileset = new BufferedImage[9];
 	
 	public ImageManager(SpriteSheet ss){
 		this.ss = ss;
@@ -17,7 +16,17 @@ public class ImageManager {
 	}
 	
 	public void loadImages(){
-		image1 = ss.crop(0, 0, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		grassTileset[0] = ss.crop(1, 1, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // plain grass tile
+		
+	}
+
+	public BufferedImage[] getTileset(String requestedTileset){
+		if(requestedTileset == "grass"){
+			return grassTileset;
+		}
+		
+		System.out.println("Not a valid tileset");
+		return null;
 	}
 	
 }

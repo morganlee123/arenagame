@@ -1,4 +1,4 @@
-package com.team1.main.gfx;
+package com.nexide.main.gfx;
 
 import java.awt.image.BufferedImage;
 
