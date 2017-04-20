@@ -14,7 +14,7 @@ import com.nexide.main.gfx.SpriteSheet;
 
 public class Game extends Canvas implements Runnable {
 	
-	private static String TITLE = "morgan is the best engine programmer ever";
+	private static String TITLE = "morgan is the best engine programmer";
 	private static int WIDTH = 1024, HEIGHT = 768;
 
 	private boolean running = false;
@@ -95,7 +95,19 @@ public class Game extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 		//
 		
-		g.drawImage(grasstiles[0], 0, 0, this);
+			// ALL DRAW GRAPHICS ARE TEMPORARY FOR TESTING PURPOSES
+		
+			for(int i = 0; i<8; i++){
+				for(int z = 0; z<12; z++)
+					g.drawImage(grasstiles[0], i*64, z*64, this);
+			}
+			for(int i = 9; i<16; i++){
+				for(int z = 0; z<12; z++)
+					g.drawImage(grasstiles[2], i*64, z*64, this);
+			}
+			for(int z = 0; z<12; z++)
+				g.drawImage(grasstiles[1], 8*64, z*64, this);
+			
 		
 		//
 		g.dispose();
@@ -116,6 +128,8 @@ public class Game extends Canvas implements Runnable {
 		
 		frame.add(game);
 		frame.pack();
+		
+		frame.setLocationRelativeTo(null);
 		
 		game.start();
 	}

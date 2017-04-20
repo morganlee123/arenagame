@@ -1,3 +1,5 @@
+package com.nexide.main;
+
 import java.net.*;
 import java.io.*;
 import java.util.*;
