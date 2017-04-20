@@ -1,5 +1,5 @@
 Morgan - Engine Programmer
-Joey - Engine Programmer
-Joe Vig - Graphic Development
-Angelo - Map Design 
+Joey - Networking Programmer
+Joe Vig - Audio Quality and Production
+Angelo - Graphic Development 
 Raghav - Gameplay Design 
