@@ -2,10 +2,9 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 /**
- * Write a description of class ComputerData here.
+ * Quick static methods to get user info such as local ip, username, etc. Will grow this file as needed.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @version 4/19
  */
 public class ComputerData
 {
