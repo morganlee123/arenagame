@@ -10,7 +10,7 @@ public class ImageManager {
 	private SpriteSheet ss;
 	
 	private int DEFAULT_TILESIZE = 16;
-	private BufferedImage[] grassTileset = new BufferedImage[9];
+	private BufferedImage[] grasssandTileset = new BufferedImage[9];
 	
 	public ImageManager(SpriteSheet ss){
 		this.ss = ss;
@@ -20,22 +20,43 @@ public class ImageManager {
 	
 	public void loadImages(){
 		
-		/* ADD NEW TILESETS, EVERYTHING BELOW IS TEMPORARY*/
-		grassTileset[0] = ss.crop(1, 1, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
-		grassTileset[0] = createResizedCopy(grassTileset[0], 64, 64); //grass
+		/* ADD NEW TILESETS */
 		
-		grassTileset[1] = ss.crop(7,1, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
-		grassTileset[1] = createResizedCopy(grassTileset[1], 64, 64); //transfer from grass to sand
+		
+		// GRASS SAND TILESET
+		grasssandTileset[0] = ss.crop(5, 0, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		grasssandTileset[0] = createResizedCopy(grasssandTileset[0], 64, 64); //top left
+		
+		grasssandTileset[1] = ss.crop(6,0, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		grasssandTileset[1] = createResizedCopy(grasssandTileset[1], 64, 64); //top middle
 	
-		grassTileset[2] = ss.crop(6,1, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
-		grassTileset[2] = createResizedCopy(grassTileset[2], 64, 64); //sand
+		grasssandTileset[2] = ss.crop(7,0, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		grasssandTileset[2] = createResizedCopy(grasssandTileset[2], 64, 64); //top right
+		
+		grasssandTileset[3] = ss.crop(5,1, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		grasssandTileset[3] = createResizedCopy(grasssandTileset[3], 64, 64); // mid left
+		
+		grasssandTileset[4] = ss.crop(6,1, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		grasssandTileset[4] = createResizedCopy(grasssandTileset[4], 64, 64); // center
+		
+		grasssandTileset[5] = ss.crop(7,1, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		grasssandTileset[5] = createResizedCopy(grasssandTileset[5], 64, 64); // mid right
+		
+		grasssandTileset[6] = ss.crop(5,2, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		grasssandTileset[6] = createResizedCopy(grasssandTileset[6], 64, 64); // bot left
+	
+		grasssandTileset[7] = ss.crop(6,2, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		grasssandTileset[7] = createResizedCopy(grasssandTileset[7], 64, 64); // bot mid
+	 
+		grasssandTileset[8] = ss.crop(7,2, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		grasssandTileset[8] = createResizedCopy(grasssandTileset[8], 64, 64); // bot right
 		
 		/****************************************************/
 	}
 
 	public BufferedImage[] getTileset(String requestedTileset){
-		if(requestedTileset == "grass"){
-			return grassTileset;
+		if(requestedTileset == "grasssand"){
+			return grasssandTileset;
 		}
 		
 		System.out.println("Not a valid tileset");
