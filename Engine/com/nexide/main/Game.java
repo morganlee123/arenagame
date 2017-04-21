@@ -25,7 +25,7 @@ public class Game extends Canvas implements Runnable {
 	
 	private ImageLoader loader;
 	
-	private BufferedImage[] grasstiles;
+	private BufferedImage[] grasssandtiles;
 	
 	private void init(){
 		loader = new ImageLoader();
@@ -39,7 +39,7 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	private void loadTextures() {
-		grasstiles = im.getTileset("grass");
+		grasssandtiles = im.getTileset("grasssand");
 		
 	}
 
@@ -96,19 +96,15 @@ public class Game extends Canvas implements Runnable {
 		//
 		
 			// ALL DRAW GRAPHICS ARE TEMPORARY FOR TESTING PURPOSES
-		
-			for(int i = 0; i<8; i++){
-				for(int z = 0; z<12; z++)
-					g.drawImage(grasstiles[0], i*64, z*64, this);
-			}
-			for(int i = 9; i<16; i++){
-				for(int z = 0; z<12; z++)
-					g.drawImage(grasstiles[2], i*64, z*64, this);
-			}
-			for(int z = 0; z<12; z++)
-				g.drawImage(grasstiles[1], 8*64, z*64, this);
-			
-		
+			g.drawImage(grasssandtiles[0], 0, 0, this);
+			g.drawImage(grasssandtiles[1], 64, 0, this);
+			g.drawImage(grasssandtiles[2], 128, 0, this);
+			g.drawImage(grasssandtiles[3], 0, 64, this);
+			g.drawImage(grasssandtiles[4], 64, 64, this);
+			g.drawImage(grasssandtiles[5], 128, 64, this);
+			g.drawImage(grasssandtiles[6], 0, 128, this);
+			g.drawImage(grasssandtiles[7], 64, 128, this);
+			g.drawImage(grasssandtiles[8], 128, 128, this);
 		//
 		g.dispose();
 		bs.show();
