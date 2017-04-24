@@ -1,4 +1,4 @@
-package com.nextide.main.net;
+package com.nexide.main.net;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
