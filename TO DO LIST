@@ -1,1 +1,2 @@
 Create a tile based map editor -- NOT COMPLETED
+Integrate more tilesets from the spritesheet to the ImageManager class
