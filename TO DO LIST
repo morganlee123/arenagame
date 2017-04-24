@@ -1,2 +1,3 @@
 Create a tile based map editor -- NOT COMPLETED
 Integrate more tilesets from the spritesheet to the ImageManager class
+Maybe for client-server connection handling, use a concurrentlinkedqueue in the java.util.concurrent package
