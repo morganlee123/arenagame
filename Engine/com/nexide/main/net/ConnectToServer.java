@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.ReentrantLock;
-
 import java.net.Socket;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
@@ -17,16 +16,14 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.InterfaceAddress;
-
 import java.util.ArrayList;
 import java.util.Enumeration;
-
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-class ConnectToServer implements Callable<String> {
+public class ConnectToServer implements Callable<String> {
     //TODO: replace synchronizations with ReentrantLocks - they're better, safer.
     
     private static final int TIMEOUT1=3; //How long the client checks for a server before creating its own, in seconds.
@@ -39,7 +36,7 @@ class ConnectToServer implements Callable<String> {
     private static PrintWriter out = null;   //sends messaqges to server
     private static Thread serverThread = null;
 
-    public static void main(String[] args) {
+    public static void initialize() {
         
         // STEP 1: Check for an existing server (or... servers?)
         boolean connected = false; //do until a connection's been made.
@@ -114,6 +111,7 @@ class ConnectToServer implements Callable<String> {
         serverThread.start();
         try{Thread.sleep(100);} catch(Exception e) {} //allows serverThread to obtain lock.
     }
+    
     
     private static boolean establishConnection(String ip,int channel) {
         System.out.println("Establishing a connection...");
