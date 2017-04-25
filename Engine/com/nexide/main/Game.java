@@ -8,9 +8,11 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
+import com.nexide.main.entities.Player;
 import com.nexide.main.gfx.ImageLoader;
 import com.nexide.main.gfx.ImageManager;
 import com.nexide.main.gfx.SpriteSheet;
+import com.nexide.main.net.ConnectToServer;
 
 public class Game extends Canvas implements Runnable {
 	
@@ -27,6 +29,7 @@ public class Game extends Canvas implements Runnable {
 	
 	private BufferedImage[] grasssandtiles;
 	
+	
 	private void init(){
 		loader = new ImageLoader();
 		
@@ -36,10 +39,13 @@ public class Game extends Canvas implements Runnable {
 		loadTextures();
 		
 		this.addKeyListener(new KeyManager());
+	
+		ConnectToServer.initialize();
+		
 	}
 	
 	private void loadTextures() {
-		grasssandtiles = im.getTileset("grasssand");
+		grasssandtiles = im.getTileset("grassdirt");
 		
 	}
 
@@ -83,7 +89,7 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	private void tick(){
-
+		//player.tick();
 	}
 	
 	private void render(){

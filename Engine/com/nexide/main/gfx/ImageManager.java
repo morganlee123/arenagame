@@ -11,6 +11,7 @@ public class ImageManager {
 	
 	private int DEFAULT_TILESIZE = 16;
 	private BufferedImage[] grasssandTileset = new BufferedImage[9];
+	private BufferedImage[] grassdirtTileset = new BufferedImage[9];
 	
 	public ImageManager(SpriteSheet ss){
 		this.ss = ss;
@@ -21,6 +22,36 @@ public class ImageManager {
 	public void loadImages(){
 		
 		/* ADD NEW TILESETS */
+		
+		// GRASS DIRT TILESET
+		
+		grassdirtTileset[0] = ss.crop(0,0, DEFAULT_TILESIZE, DEFAULT_TILESIZE); //top left
+		grassdirtTileset[0] = createResizedCopy(grassdirtTileset[0], 64 ,64);
+		
+		grassdirtTileset[1] = ss.crop(1,0, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // top mid
+		grassdirtTileset[1] = createResizedCopy(grassdirtTileset[1], 64 ,64);
+		
+		grassdirtTileset[2] = ss.crop(2,0, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // top right
+		grassdirtTileset[2] = createResizedCopy(grassdirtTileset[2], 64 ,64);
+		
+		grassdirtTileset[3] = ss.crop(0,1, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // mid left
+		grassdirtTileset[3] = createResizedCopy(grassdirtTileset[3], 64 ,64);
+		
+		grassdirtTileset[4] = ss.crop(1,1, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // center
+		grassdirtTileset[4] = createResizedCopy(grassdirtTileset[4], 64 ,64);
+		
+		grassdirtTileset[5] = ss.crop(2,1, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // mid right
+		grassdirtTileset[5] = createResizedCopy(grassdirtTileset[5], 64 ,64);
+		
+		grassdirtTileset[6] = ss.crop(0,2, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // bot left
+		grassdirtTileset[6] = createResizedCopy(grassdirtTileset[6], 64 ,64);
+		
+		grassdirtTileset[7] = ss.crop(1,2, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // bot mid
+		grassdirtTileset[7] = createResizedCopy(grassdirtTileset[7], 64 ,64);
+		
+		grassdirtTileset[8] = ss.crop(2,2, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // bot right
+		grassdirtTileset[8] = createResizedCopy(grassdirtTileset[8], 64 ,64);
+		
 		
 		
 		// GRASS SAND TILESET
@@ -55,11 +86,15 @@ public class ImageManager {
 	}
 
 	public BufferedImage[] getTileset(String requestedTileset){
-		if(requestedTileset == "grasssand"){
+		switch(requestedTileset){
+		case "grasssand":
 			return grasssandTileset;
+		case "grassdirt":
+			return grassdirtTileset;
+		default:
+			System.out.println("Not a valid tileset");
 		}
 		
-		System.out.println("Not a valid tileset");
 		return null;
 	}
 	
