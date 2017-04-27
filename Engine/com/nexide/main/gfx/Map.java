@@ -1,3 +1,5 @@
+package com.nexide.main.gfx;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.AffineTransformOp;
 import java.awt.geom.AffineTransform;
