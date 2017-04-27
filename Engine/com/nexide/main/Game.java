@@ -27,7 +27,7 @@ public class Game extends Canvas implements Runnable {
 	
 	private ImageLoader loader;
 	
-	private BufferedImage[] grasssandtiles;
+	private BufferedImage[] grasssandtiles, grassdirttiles, stonetiles, misctiles;
 	
 	
 	private void init(){
@@ -45,7 +45,10 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	private void loadTextures() {
-		grasssandtiles = im.getTileset("grassdirt");
+		grasssandtiles = im.getTileset("grasssand");
+		grassdirttiles = im.getTileset("grassdirt");
+		stonetiles = im.getTileset("stone");
+		misctiles = im.getTileset("misc");
 		
 	}
 
@@ -101,16 +104,31 @@ public class Game extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 		//
 		
-			// ALL DRAW GRAPHICS ARE TEMPORARY FOR TESTING PURPOSES
-			g.drawImage(grasssandtiles[0], 0, 0, this);
-			g.drawImage(grasssandtiles[1], 64, 0, this);
-			g.drawImage(grasssandtiles[2], 128, 0, this);
-			g.drawImage(grasssandtiles[3], 0, 64, this);
-			g.drawImage(grasssandtiles[4], 64, 64, this);
-			g.drawImage(grasssandtiles[5], 128, 64, this);
-			g.drawImage(grasssandtiles[6], 0, 128, this);
-			g.drawImage(grasssandtiles[7], 64, 128, this);
-			g.drawImage(grasssandtiles[8], 128, 128, this);
+		for(int i = 0; i<8; i++){
+			for(int z = 0; z<12; z++){
+				g.drawImage(grassdirttiles[4], i*64, z*64, this);
+			}
+		}
+		
+		for(int z = 0; z<12; z++){
+			g.drawImage(grasssandtiles[5], 8*64, z*64, this);
+		}
+		
+		for(int i = 9; i<16; i++){
+			for(int z = 0; z<12; z++){
+				g.drawImage(grasssandtiles[4], i*64, z*64, this);
+			}
+		}
+		
+		for(int i = 14; i<16; i++){
+			for(int z = 0; z<12; z++){
+				g.drawImage(misctiles[0], i*64, z*64, this);
+			}
+		}
+		
+		g.drawImage(misctiles[1], 128, 256, this);
+		
+		
 		//
 		g.dispose();
 		bs.show();

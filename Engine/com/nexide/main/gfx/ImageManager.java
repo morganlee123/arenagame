@@ -10,8 +10,11 @@ public class ImageManager {
 	private SpriteSheet ss;
 	
 	private int DEFAULT_TILESIZE = 16;
+	
 	private BufferedImage[] grasssandTileset = new BufferedImage[9];
 	private BufferedImage[] grassdirtTileset = new BufferedImage[9];
+	private BufferedImage[] stoneTileset = new BufferedImage[9];
+	private BufferedImage[] miscTileset = new BufferedImage[9];
 	
 	public ImageManager(SpriteSheet ss){
 		this.ss = ss;
@@ -52,7 +55,34 @@ public class ImageManager {
 		grassdirtTileset[8] = ss.crop(2,2, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // bot right
 		grassdirtTileset[8] = createResizedCopy(grassdirtTileset[8], 64 ,64);
 		
+		// STONE TILESET
 		
+		stoneTileset[0] = ss.crop(0,3, DEFAULT_TILESIZE, DEFAULT_TILESIZE); //top left
+		stoneTileset[0] = createResizedCopy(stoneTileset[0], 64 ,64);
+		
+		stoneTileset[1] = ss.crop(1,3, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // top mid
+		stoneTileset[1] = createResizedCopy(stoneTileset[1], 64 ,64);
+		
+		stoneTileset[2] = ss.crop(2,3, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // top right
+		stoneTileset[2] = createResizedCopy(stoneTileset[2], 64 ,64);
+		
+		stoneTileset[3] = ss.crop(0,4, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // mid left
+		stoneTileset[3] = createResizedCopy(stoneTileset[3], 64 ,64);
+		
+		stoneTileset[4] = ss.crop(1,4, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // center
+		stoneTileset[4] = createResizedCopy(stoneTileset[4], 64 ,64);
+		
+		stoneTileset[5] = ss.crop(2,4, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // mid right
+		stoneTileset[5] = createResizedCopy(stoneTileset[5], 64 ,64);
+		
+		stoneTileset[6] = ss.crop(0,5, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // bot left
+		stoneTileset[6] = createResizedCopy(stoneTileset[6], 64 ,64);
+		
+		stoneTileset[7] = ss.crop(1,5, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // bot mid
+		stoneTileset[7] = createResizedCopy(stoneTileset[7], 64 ,64);
+		
+		stoneTileset[8] = ss.crop(2,5, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // bot right
+		stoneTileset[8] = createResizedCopy(stoneTileset[8], 64 ,64);
 		
 		// GRASS SAND TILESET
 		grasssandTileset[0] = ss.crop(5, 0, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
@@ -82,6 +112,14 @@ public class ImageManager {
 		grasssandTileset[8] = ss.crop(7,2, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
 		grasssandTileset[8] = createResizedCopy(grasssandTileset[8], 64, 64); // bot right
 		
+		// MISC TILES
+		
+		miscTileset[0] = ss.crop(4, 0, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		miscTileset[0] = createResizedCopy(miscTileset[0], 64, 64); //WATER
+		
+		miscTileset[1] = ss.crop(9, 0, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		miscTileset[1] = createResizedCopy(miscTileset[1], 64, 64); // ROCK
+		
 		/****************************************************/
 	}
 
@@ -91,6 +129,10 @@ public class ImageManager {
 			return grasssandTileset;
 		case "grassdirt":
 			return grassdirtTileset;
+		case "stone":
+			return stoneTileset;
+		case "misc":
+			return miscTileset;
 		default:
 			System.out.println("Not a valid tileset");
 		}
