@@ -1,5 +1,6 @@
 Maybe for client-server connection handling, use a concurrentlinkedqueue in the java.util.concurrent package
 Initialize images in ImageManager class using nested for loops rather than writing out all of them individually. create RenderTileset(int width, int height) method?
 Quick fixes on the map
-add player
+fix buggy water
 add player-map interaction including capture zones
+add player animations
