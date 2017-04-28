@@ -10,14 +10,14 @@ public class Player implements Entity {
 
 	private int xVel, yVel;
 	private double mouseX, mouseY;
-	private int xPos, yPos;
+	private int xOffset, yOffset;
 	
 	private BufferedImage[] playerSprites;
 	
 	public Player(int x, int y, BufferedImage[] playerSprites){
 		this.playerSprites = playerSprites;
-		this.xPos = x;
-		this.yPos = y;
+		this.xOffset = x;
+		this.yOffset = y;
 		
 	}
 	
@@ -30,15 +30,15 @@ public class Player implements Entity {
 	}
 	
 	public void render(Graphics g, Game game){
-		g.drawImage(playerSprites[0], xPos, yPos, game);
+		g.drawImage(playerSprites[0], 0-xOffset, 0-yOffset, game);
 	}
 	
 	public int getX(){
-		return xPos;
+		return xOffset;
 	}
 	
 	public int getY(){
-		return yPos;
+		return yOffset;
 	}
 	
 	
