@@ -8,8 +8,6 @@ import com.nexide.main.Game;
 
 public class Player implements Entity {
 
-	private Game game;
-	
 	private int xVel, yVel;
 	private double mouseX, mouseY;
 	private int xPos, yPos;
@@ -21,17 +19,17 @@ public class Player implements Entity {
 		this.xPos = x;
 		this.yPos = y;
 		
-		game = new Game();
 	}
 	
 	public void tick(){
 		mouseX = MouseInfo.getPointerInfo().getLocation().getX();
 		mouseY = MouseInfo.getPointerInfo().getLocation().getY();
 	
+		
 		System.out.println(mouseX + ", " + mouseY);
 	}
 	
-	public void render(Graphics g){
+	public void render(Graphics g, Game game){
 		g.drawImage(playerSprites[0], xPos, yPos, game);
 	}
 	
