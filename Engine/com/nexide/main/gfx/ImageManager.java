@@ -2,7 +2,6 @@ package com.nexide.main.gfx;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 public class ImageManager {
@@ -15,6 +14,7 @@ public class ImageManager {
 	private BufferedImage[] grassdirtTileset = new BufferedImage[9];
 	private BufferedImage[] stoneTileset = new BufferedImage[9];
 	private BufferedImage[] miscTileset = new BufferedImage[9];
+	private BufferedImage[] playerSprites = new BufferedImage[12];
 	
 	public ImageManager(SpriteSheet ss){
 		this.ss = ss;
@@ -25,6 +25,44 @@ public class ImageManager {
 	public void loadImages(){
 		
 		/* ADD NEW TILESETS */
+		
+		// ALL PLAYER SPRITES
+		
+		playerSprites[0] = ss.crop(10, 0, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		playerSprites[0] = createResizedCopy(playerSprites[0], 64, 64);
+		
+		playerSprites[1] = ss.crop(10, 1, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		playerSprites[1] = createResizedCopy(playerSprites[1], 64, 64);
+		
+		playerSprites[2] = ss.crop(10, 2, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		playerSprites[2] = createResizedCopy(playerSprites[2], 64, 64);
+		
+		playerSprites[3] = ss.crop(11, 0, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		playerSprites[3] = createResizedCopy(playerSprites[3], 64, 64);
+		
+		playerSprites[4] = ss.crop(11, 1, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		playerSprites[4] = createResizedCopy(playerSprites[4], 64, 64);
+		
+		playerSprites[5] = ss.crop(11, 2, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		playerSprites[5] = createResizedCopy(playerSprites[5], 64, 64);
+		
+		playerSprites[6] = ss.crop(12, 0,  DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		playerSprites[6] = createResizedCopy(playerSprites[6], 64, 64);
+	
+		playerSprites[7] = ss.crop(12, 1, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		playerSprites[7] = createResizedCopy(playerSprites[7], 64, 64);
+		
+		playerSprites[8] = ss.crop(12, 2, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		playerSprites[8] = createResizedCopy(playerSprites[8], 64, 64);
+	
+		playerSprites[9] = ss.crop(13, 0, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		playerSprites[9] = createResizedCopy(playerSprites[9], 64, 64);
+		
+		playerSprites[10] = ss.crop(13, 1, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		playerSprites[10] = createResizedCopy(playerSprites[10], 64, 64);
+		
+		playerSprites[11] = ss.crop(13, 2, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		playerSprites[11] = createResizedCopy(playerSprites[11], 64, 64);
 		
 		// GRASS DIRT TILESET
 		
@@ -133,6 +171,8 @@ public class ImageManager {
 			return stoneTileset;
 		case "misc":
 			return miscTileset;
+		case "playersprites":
+			return playerSprites;
 		default:
 			System.out.println("Not a valid tileset");
 		}

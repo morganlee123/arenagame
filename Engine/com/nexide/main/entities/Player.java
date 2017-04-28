@@ -8,9 +8,11 @@ import com.nexide.main.Game;
 
 public class Player implements Entity {
 
-	private int xVel, yVel;
+	private static int xVel;
+	private static int yVel;
 	private double mouseX, mouseY;
-	private int xOffset, yOffset;
+	private static int xOffset;
+	private static int yOffset;
 	
 	private BufferedImage[] playerSprites;
 	
@@ -19,6 +21,9 @@ public class Player implements Entity {
 		this.xOffset = x;
 		this.yOffset = y;
 		
+		
+		xVel = 5;
+		yVel = 5;
 	}
 	
 	public void tick(){
@@ -29,8 +34,10 @@ public class Player implements Entity {
 		System.out.println(mouseX + ", " + mouseY);
 	}
 	
+	
+	// MAKE MAP MOVE NOT THE PLAYER, WILL BE CLIENT SIDE NOT SERVER SIDE OF COURSE
 	public void render(Graphics g, Game game){
-		g.drawImage(playerSprites[0], 0-xOffset, 0-yOffset, game);
+		g.drawImage(playerSprites[0], xOffset, yOffset, game);
 	}
 	
 	public int getX(){
@@ -39,6 +46,22 @@ public class Player implements Entity {
 	
 	public int getY(){
 		return yOffset;
+	}
+	
+	public static int getXVel(){
+		return xVel;
+	}
+	
+	public static int getYVel(){
+		return yVel;
+	}
+	
+	public static void setX(int x){
+		xOffset+=x;
+	}
+	
+	public static void setY(int y){
+		yOffset+=y;
 	}
 	
 	

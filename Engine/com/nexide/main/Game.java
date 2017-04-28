@@ -107,7 +107,7 @@ public class Game extends Canvas implements Runnable {
 	
 		ConnectToServer.initialize();
 		
-		// IMPORT PLAYER SPRITES player = new Player(this.getWidth() / 2, this.getHeight / 2, );
+		player = new Player(this.getWidth() / 2, this.getHeight() / 2, im.getTileset("playersprites"));
 		
 	}
 	
@@ -171,7 +171,7 @@ public class Game extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 		//
 		testMap.render(g, this, tm);
-		player.render(g);
+		player.render(g, this);
 		
 		
 		//
