@@ -9,7 +9,7 @@ public class ImageManager {
 	
 	private SpriteSheet ss;
 	
-	private int DEFAULT_TILESIZE = 16;
+	public int DEFAULT_TILESIZE = 16;
 	
 	private BufferedImage[] grasssandTileset = new BufferedImage[9];
 	private BufferedImage[] grassdirtTileset = new BufferedImage[9];
