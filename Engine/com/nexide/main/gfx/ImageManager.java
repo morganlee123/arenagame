@@ -152,11 +152,17 @@ public class ImageManager {
 		
 		// MISC TILES
 		
-		miscTileset[0] = ss.crop(4, 0, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		miscTileset[0] = ss.crop(4, 3, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
 		miscTileset[0] = createResizedCopy(miscTileset[0], 64, 64); //WATER
 		
-		miscTileset[1] = ss.crop(9, 0, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
-		miscTileset[1] = createResizedCopy(miscTileset[1], 64, 64); // ROCK
+		miscTileset[1] = ss.crop(5,3, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		miscTileset[1] = createResizedCopy(miscTileset[1], 64, 64); // WATER FRAME 2
+		
+		miscTileset[2] = ss.crop(6,3, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		miscTileset[2] = createResizedCopy(miscTileset[2], 64, 64);
+		
+		miscTileset[3] = ss.crop(9, 0, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		miscTileset[3] = createResizedCopy(miscTileset[3], 64, 64); // ROCK
 		
 		/****************************************************/
 	}
@@ -183,7 +189,6 @@ public class ImageManager {
 	public BufferedImage createResizedCopy(Image originalImage, 
     		int scaledWidth, int scaledHeight)
     {
-    	System.out.println("resizing...");
     	BufferedImage scaledBI = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);
     	Graphics2D g = scaledBI.createGraphics();
     	g.drawImage(originalImage, 0, 0, scaledWidth, scaledHeight, null); 

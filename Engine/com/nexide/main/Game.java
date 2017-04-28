@@ -1,6 +1,7 @@
 package com.nexide.main;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
@@ -159,7 +160,8 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	private void tick(){
-		//player.tick();
+		player.tick();
+		testMap.tick(player);
 	}
 	
 	private void render(){
@@ -170,6 +172,11 @@ public class Game extends Canvas implements Runnable {
 		}
 		Graphics g = bs.getDrawGraphics();
 		//
+		
+		// to remove double buffer flickering on the outskirts of the map
+		g.setColor(Color.GRAY);
+		g.fillRect(-1500, 0, 4200, 4200);
+		
 		testMap.render(g, this, tm);
 		player.render(g, this);
 		

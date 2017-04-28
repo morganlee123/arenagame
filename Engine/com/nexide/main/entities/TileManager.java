@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 
 import com.nexide.main.Game;
 import com.nexide.main.Map;
+import com.nexide.main.gfx.Animation;
 import com.nexide.main.gfx.ImageManager;
 
 public class TileManager {
@@ -25,8 +26,8 @@ public class TileManager {
 		stoneTileset = im.getTileset("stone");
 		
 		grasstile = new Tile(grassdirtTileset[4], false); // NORM GRASS
-		rocktile = new Tile(miscTileset[1], true); // ROCK
-		watertile = new Tile(miscTileset[0], true); // WATER - not rendering?
+		rocktile = new Tile(miscTileset[3], true); // ROCK
+		watertile = new Tile(new Animation(10, miscTileset[0], miscTileset[1], miscTileset[2]), true);
 		sandtile = new Tile(grasssandTileset[4], false); // SAND
 		cobbletile = new Tile(stoneTileset[4], true); // COBBLE
 	}

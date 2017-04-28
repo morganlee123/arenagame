@@ -8,6 +8,7 @@ public class SpriteSheet {
 	
 	public SpriteSheet(BufferedImage image){
 		this.image = image;
+		
 	}
 	
 	public BufferedImage crop(int a, int b, int width, int height){

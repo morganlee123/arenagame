@@ -4,18 +4,22 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import com.nexide.main.Game;
+import com.nexide.main.gfx.Animation;
 
 public class Tile implements Entity{
 	
 	private BufferedImage tile;
-	private int x, y;
+	private Animation anim;
 	
 	private boolean isSolid;
 	
 	public Tile(BufferedImage tile, boolean isSolid){
 		this.tile = tile;
-		this.x = x;
-		this.y = y;
+		this.isSolid = isSolid;
+	}
+	
+	public Tile(Animation anim, boolean isSolid){
+		this.anim = anim;
 		this.isSolid = isSolid;
 	}
 
@@ -31,12 +35,8 @@ public class Tile implements Entity{
 		return tile;
 	}
 	
-	public int getTileX(){
-		return x;
-	}
-	
-	public int getTileY(){
-		return y;
+	public Animation getAnimation(){
+		return anim;
 	}
 	
 	public boolean isSolid(){
