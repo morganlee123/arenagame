@@ -17,6 +17,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.InterfaceAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
@@ -24,10 +25,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class ConnectToServer implements Callable<String> {
-    //TODO: replace synchronizations with ReentrantLocks - they're better, safer.
+    //Each tick, client should... send next movement to server
+                                //get other positions/health from server
+                                //get bullets from server
     
-    private static final int TIMEOUT1=3; //How long the client checks for a server before creating its own, in seconds.
-    private static final byte MAX_PARTY_SIZE = 12;
+    private static final int TPS = 30; //ticks per second
+    
+    private static final int HEALTH_DROP = 4;
+    private static final int TIMEOUT1=1; //How long the client checks for a server before creating its own, in seconds.
+    private static final byte MAX_PARTY_SIZE = 8; //Max party size
+    private static final int MAX_PT_YCOORD = 35; //"barrier" for points, max y-value to earn points
+    private static final int MIN_PT_YCOORD = 20; //"barrier" for points, min y-value to earn points
+    
     
     private static ArrayList<String> DNSListings = new ArrayList<String>(); //Stored as [IP]@[channel] ex.: "192.168.1.1@4444"
     
@@ -36,6 +45,10 @@ public class ConnectToServer implements Callable<String> {
     private static PrintWriter out = null;   //sends messaqges to server
     private static Thread serverThread = null;
 
+    private static double startPosX[] = {31,34,31,34,31,34,31,34};
+    private static double startPosY[] = { 4, 4, 6, 6,49,49,51,51};
+    private static int ID = -1;
+    
     public static void initialize() {
         
         // STEP 1: Check for an existing server (or... servers?)
@@ -72,7 +85,8 @@ public class ConnectToServer implements Callable<String> {
         //STEP 3: Send original packet of information to the server. Included: username, total kills, total deaths, total score, total time played. 
         //        These things will be used by the server for matchmaking.
         
-        
+        try {send(System.getProperty("user.name"));} catch(Exception e) {e.printStackTrace();}
+        try {ID = Integer.parseInt(receive());} catch (Exception e) { e.printStackTrace(); }
         //STEP 4: Get original packet of information from the server.
         
         
@@ -177,15 +191,13 @@ public class ConnectToServer implements Callable<String> {
                 byte[] recvBuf = new byte[15000];
                 DatagramPacket receivePacket = new DatagramPacket(recvBuf, recvBuf.length);
                 c.receive(receivePacket);
-                //We have a response
-                //What we used to print: System.out.println(getClass().getName() + ">>> Broadcast response from server: " + receivePacket.getAddress().getHostAddress());
+                
                 //Check if the message is correct
                 String message = new String(receivePacket.getData()).trim();
                 boolean AlreadySent = false;
                 for (int i = 0; i < DNSListings.size(); i++)
                     if (message.equals(DNSListings.get(i))) AlreadySent = true;
                 if (message.startsWith("AVAIL_SERVER_") && !AlreadySent) {
-                    //DO SOMETHING WITH THE SERVER'S IP (for example, store it in your controller)
                     String toPrint = "\t[" + validityCounter + "] " + message.split("_")[2] + " : ";
                     if (message.split("_").length > 4)
                         toPrint = toPrint + message.split("_")[4];
@@ -202,7 +214,7 @@ public class ConnectToServer implements Callable<String> {
         return "no available channel"; //Satisfies the IDE, should be unreachable unless something goes wrong.
     }
     
-	public static String fetchIP(){
+    public static String fetchIP(){
         try {
             InetAddress addr = InetAddress.getLocalHost();
             String ip = addr.getHostAddress();
@@ -252,7 +264,7 @@ public class ConnectToServer implements Callable<String> {
     
     private static class Server implements Runnable {
         private int port = 4444; //accessed by gsp
-        
+        private int tick = -2; //signifies waiting for players
         private static boolean isRunning = false;
         
         private static Server s = new Server(); //accessed by getInstance
@@ -261,10 +273,17 @@ public class ConnectToServer implements Callable<String> {
         
         private ArrayList<Thread> clients = new ArrayList<Thread>();
         private ArrayList<String> unames = new ArrayList<String>(); //Requires Lock
-        private ArrayList<Integer> xCoords = new ArrayList<Integer>(); //Requires Lock
-        private ArrayList<Integer> yCoords = new ArrayList<Integer>(); //Requires Lock
-        private ArrayList<Integer> OLDxCoords = new ArrayList<Integer>(); //Requires Lock
-        private ArrayList<Integer> OLDyCoords = new ArrayList<Integer>(); //Requires Lock
+        private ArrayList<Double> xCoords = new ArrayList<Double>(); //Requires Lock
+        private ArrayList<Double> yCoords = new ArrayList<Double>(); //Requires Lock
+        private ArrayList<Integer> health = new ArrayList<Integer>();
+        private ArrayList<Integer> rotation = new ArrayList<Integer>();
+        private ArrayList<Integer> shootStatus = new ArrayList<Integer>();
+        private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+        private ArrayList<Boolean> shooting = new ArrayList<Boolean>();
+        private ArrayList<Integer> shotTick = new ArrayList<Integer>();
+        
+        private int BlueTeamScore = 0;
+        private int RedTeamScore = 0;
         
         public static Server getInstance() {return s;}
         
@@ -281,31 +300,148 @@ public class ConnectToServer implements Callable<String> {
                 port = serverSocket.getLocalPort();
                 System.out.println("Opened port " + serverSocket.getLocalPort() + " of " + serverSocket.getInetAddress());
                 ServerLock.unlock();
-				Thread discThread = new Thread(DiscoveryThread.getInstance());
-        		discThread.start();
+                Thread discThread = new Thread(DiscoveryThread.getInstance());
+                discThread.start();
                 while (clients.size() < MAX_PARTY_SIZE ) {
+                    unames.add("<awaiting connection>");
+                    xCoords.add(startPosX[clients.size()]);
+                    yCoords.add(startPosY[clients.size()]);
+                    health.add(100);
+                    rotation.add(0);
+                    shootStatus.add(0);
+                    
                     System.out.println("Awaiting Connections...");
-                    Thread temp = new ServerThread(serverSocket.accept());
+                    Thread temp = new ServerThread(serverSocket.accept(),clients.size());
                     temp.start();
                     ServerLock.lock();
                     clients.add(temp);
                     ServerLock.unlock();
                     System.out.println("Clients = " + clients.size());
                 }
-				discThread.stop();
+                discThread.stop();
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
                 if (ServerLock.isHeldByCurrentThread())
                     ServerLock.unlock();
             }
+            try{Thread.sleep(100);}catch(Exception e){}
+            System.out.println(Arrays.toString(unames.toArray()));
+            tick = -1; //signifies syncing
+            try {Thread.sleep(100);} catch (Exception e) {} //Small delay to sync
+            tick++;
+            double mspt = (1.0/((double)TPS))*1000.0;
+            System.out.println("Expected MSPT: " + mspt);
+            while (isRunning) {
+                long START = System.currentTimeMillis();
+                
+                //1. update the scores
+                
+                for (int i = 0; i < 4; i++) {
+                    if (yCoords.get(i) < MAX_PT_YCOORD && yCoords.get(i) > MIN_PT_YCOORD)
+                        BlueTeamScore++;
+                }
+                
+                for (int i = 4; i < 8; i++) {
+                    if (yCoords.get(i) < MAX_PT_YCOORD && yCoords.get(i) > MIN_PT_YCOORD)
+                        RedTeamScore++;
+                }
+                
+                //2. update the bullets
+                
+                
+                for(int i = bullets.size() - 1; i >= 0; i++) {
+                    if (bullets.get(i).shouldDispose())
+                        bullets.remove(i);
+                    else
+                        bullets.get(i).updatePosition();
+                }
+                
+                //3. update the health
+                
+                for (Bullet bullet : bullets)
+                    bullet.appendHealth();
+                    
+                //4. update time
+                
+                double FIN = (double) (System.currentTimeMillis() - START);
+                //System.out.println("MSPT = " + mspt + ", FIN = " + FIN + "...");
+                if (FIN < mspt)
+                    try{Thread.sleep((long)(mspt-FIN));}catch (Exception e) {}
+                FIN = System.currentTimeMillis() - START;
+                tick++;
+                if ((tick != 0) && (tick % 60 == 0))
+                    System.out.println("Sample frame's FPS: " + 1/(FIN/1000));
+            }
+        }
+        
+        private static class Bullet {
+            private static final int BULLETSPEED = 400 / TPS; //400 Meters per second = ~13 meters per tick @ 30TPS
+            
+            private double xVelocity;
+            private double yVelocity;
+            private double currentX;
+            private double currentY;
+            private double previousX;
+            private double previousY;
+            private int userID;
+            
+            public Bullet(double startX, double startY, int degreesRotation, int uid) {
+                currentX=startX; 
+                currentY=startY;
+                xVelocity = BULLETSPEED*Math.cos(Math.toRadians(degreesRotation));
+                yVelocity = BULLETSPEED*Math.sin(Math.toRadians(degreesRotation));
+                userID = uid;
+            }
+            
+            public void updatePosition() {
+                previousX = currentX;
+                previousY = currentY;
+                currentX += xVelocity;
+                currentY += yVelocity;
+            }
+            
+            public double getX() { return currentX; }
+            public double getY() { return currentY; }
+            
+            public void appendHealth() {
+                for (int i = 0; i < Server.getInstance().xCoords.size(); i++) {
+                    if (inLine(currentX,currentY,previousY,previousX,Server.getInstance().xCoords.get(i),Server.getInstance().yCoords.get(i))) {
+                        System.out.println("HIT: User = " + Server.getInstance().unames.get(i));
+                        Server.getInstance().health.set(i,Server.getInstance().health.get(i) - HEALTH_DROP);
+                    }
+                }
+            }
+            
+            public boolean shouldDispose() {
+                return (currentX > 64 || currentX < 0 || currentY > 54 || currentY < 0);
+            }
+            
+            private static boolean inLine(double Ax, double Ay, double Bx, double By, double Cx, double Cy) { //a and b are bullet path, c is player
+               //1. is it between A and B?
+               if (!((Ax <= Cx && Cx < Bx) || (Ax >= Cx && Cx > Bx))) {
+                   return false;
+               }
+               if (!((Ay <= Cy && Cy < By) || (Ay >= Cy && Cy > By))) {
+                   return false;
+               }
+               
+               //2. does it have the same slope as A and B?
+               //   a) Vertical?
+               if (Ax == Cx) return Bx == Cx;
+               if (Bx == Cx) return Ax == Cx;
+               //   b) same slope?
+               return (Ay - Cy)/(Ax - Cx) == (Cy - By)/(Cx - Bx);
+            }
         }
         
         private static class ServerThread extends Thread {
             private Socket socket = null;
+            private final int THREAD_ID;
         
-            public ServerThread(Socket socket) {
+            public ServerThread(Socket socket, int threadID) {
                 this.socket = socket;
+                THREAD_ID=threadID;
             }
             
             public synchronized void run() {
@@ -315,7 +451,47 @@ public class ConnectToServer implements Callable<String> {
                     BufferedReader Sin = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     
                     //SERVER CODE FOR INTERACTIONS GOES HERE
-					Sout.println("Connection was a success!");
+                    Sout.println("Connection was a success!");                  //Success message (confirmation)
+                    Server.getInstance().unames.set(THREAD_ID,Sin.readLine());  //Username
+                    Sout.println(""+THREAD_ID);
+                    
+                    while (true) {
+                        String input = Sin.readLine();
+                        String output = "";
+                        if (input.equalsIgnoreCase("getUserPositions")) {
+                            output = Server.getInstance().xCoords.get(0) + "," + Server.getInstance().yCoords.get(0);
+                            for(int i = 1; i < Server.getInstance().xCoords.size(); i++)
+                                output = output + "&" + Server.getInstance().xCoords.get(i) + "," + Server.getInstance().yCoords.get(i);
+                        } else if (input.equalsIgnoreCase("getUserHealth")) {
+                            output = "" + Server.getInstance().health.get(0);
+                            for(int i = 1; i < Server.getInstance().xCoords.size(); i++)
+                                output = output + "&" + Server.getInstance().health.get(i);
+                        } else if(input.equalsIgnoreCase("getTick")) {
+                            output = "" + Server.getInstance().tick;
+                        } else if (input.equalsIgnoreCase("Respawn")) {
+                            Server.getInstance().xCoords.set(THREAD_ID,startPosX[THREAD_ID]);
+                            Server.getInstance().yCoords.set(THREAD_ID,startPosY[THREAD_ID]);
+                            Server.getInstance().health.set(THREAD_ID,100);
+                            output = startPosX[THREAD_ID] + "&" + startPosY[THREAD_ID];
+                        }else if (input.startsWith("sendInput")) {
+                            String portions[] = input.split("&");
+                            Server.getInstance().rotation.set(THREAD_ID,Integer.parseInt(portions[1]));
+                            Server.getInstance().xCoords.set(THREAD_ID,Double.parseDouble(portions[2]));
+                            Server.getInstance().yCoords.set(THREAD_ID,Double.parseDouble(portions[3]));
+                            Server.getInstance().shooting.set(THREAD_ID,Boolean.parseBoolean(portions[4]));
+                            output = "Success.";
+                        } else if (input.equalsIgnoreCase("getBulletPositions")) {
+                            if (Server.getInstance().bullets.size() < 1)
+                                output = "no bullets.";
+                            else
+                                output = Server.getInstance().bullets.get(0).getX() + "," + Server.getInstance().bullets.get(0).getY();
+                            for (int i = 1; i < Server.getInstance().bullets.size(); i++)
+                                output = output + "&" + Server.getInstance().bullets.get(i).getX() + "," + Server.getInstance().bullets.get(i).getY();
+                        } else if (input.equalsIgnoreCase("getScore")) {
+                            output = Server.getInstance().BlueTeamScore + "&" + Server.getInstance().RedTeamScore;
+                        }
+                        Sout.println(output);
+                    }
                     
                 }catch (IOException e) {
                     e.printStackTrace();
@@ -337,7 +513,7 @@ public class ConnectToServer implements Callable<String> {
                     //Keep a socket open to listen to all the UDP trafic that is destined for this port
                     socket = new DatagramSocket(42317, InetAddress.getByName("0.0.0.0"));
                     socket.setBroadcast(true);
-					System.out.println("Running DiscoveryThread!");
+                    System.out.println("Running DiscoveryThread!");
                     while (true) {
                       //Receive a packet
                       byte[] recvBuf = new byte[15000];
@@ -349,7 +525,7 @@ public class ConnectToServer implements Callable<String> {
                       if (message.startsWith("RESPOND_AVAIL_SERV_")) {
                           
                           System.out.println("Sniffed a GOOD packet");
-                          byte[] sendData = ("AVAIL_SERVER_" + fetchIP() + "_" + Server.getInstance().port).getBytes();
+                          byte[] sendData = ("AVAIL_SERVER_" + fetchIP() + "_" + Server.getInstance().port + "_" + System.getProperty("user.name")).getBytes();
                           
                           //Send a response
                           
