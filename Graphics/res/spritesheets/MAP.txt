@@ -16,9 +16,14 @@ Key:
 12 - grass>sand left edge (5,1)
 13 - grass>sand rightp edge (7,1)
 14 - grass>sand top left elbow (8,1)
-15 - grass>sand top left elbow (8,1)
-16 - grass>sand top left elbow (8,1)
-17 - grass>sand top left elbow (8,1)
+15 - grass>sand top right elbow (9,1)
+16 - grass>sand bottom left elbow (8,2)
+17 - grass>sand bottom right elbow (9,2)
+18 - cobble top left corner (0,3)
+19 - cobble top right corner (2,3)
+20 - cobble bottom left corner (0,5)
+21 - cobble bottom right corner (2,5)
+22 - cobble top left corner (0,3)
 Map:
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,4,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,4,3,3,3,3,3,3,3,3,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
