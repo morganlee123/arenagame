@@ -31,6 +31,20 @@ Key:
 27 - cobble top right elbow (4,4)
 28 - cobble bottom left elbow (3,5)
 29 - cobble bottom right elbow (4,5)
+30 - dark cobble top left corner (0,6)
+31 - dark cobble top right corner (2,6)
+32 - dark cobble bottom left corner (0,8)
+33 - dark cobble bottom right corner (2,8)
+34 - dark cobble top edge (1,6)
+35 - dark cobble left edge (0,7)
+36 - dark cobble right edge (2,7)
+37 - dark cobble bottom edge (1,8)
+38 - dark cobble top left elbow (3,7)
+39 - dark cobble top right elbow (4,7)
+40 - dark cobble bottom left elbow (3,8)
+41 - dark cobble bottom right elbow (4,8)
+
+
 Map:
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,4,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,4,3,3,3,3,3,3,3,3,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
