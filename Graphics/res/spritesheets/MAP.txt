@@ -1,14 +1,24 @@
 Started the map below: 
 
 Key:
-0 - grass
-1 - rock
-2 - water
-3 - sand
-4 - cobble
-5 - brick
-6 - sand>brick transitions
-7 - brick/water transitions
+0 - grass (1,1)
+1 - rock (9,0)
+2 - water (4,3)
+3 - sand (6,1)
+4 - dark cobble (1,7)
+5 - cobble (1,4)
+6 - grass>sand top left corner (5,0)
+7 - grass>sand top right corner (7,0)
+8 - grass>sand bottom left corner (5,2)
+9 - grass>sand bottom right corner (7,2)
+10 - grass>sand top edge (6,0)
+11 - grass>sand bottom edge (6,2)
+12 - grass>sand left edge (5,1)
+13 - grass>sand rightp edge (7,1)
+14 - grass>sand top left elbow (8,1)
+15 - grass>sand top left elbow (8,1)
+16 - grass>sand top left elbow (8,1)
+17 - grass>sand top left elbow (8,1)
 Map:
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,4,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,4,3,3,3,3,3,3,3,3,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
