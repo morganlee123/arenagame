@@ -15,6 +15,7 @@ public class ImageManager {
 	private BufferedImage[] stoneTileset = new BufferedImage[9];
 	private BufferedImage[] miscTileset = new BufferedImage[9];
 	private BufferedImage[] playerSprites = new BufferedImage[12];
+	private BufferedImage[] darkcobbleTileset = new BufferedImage[9];
 	
 	public ImageManager(SpriteSheet ss){
 		this.ss = ss;
@@ -92,6 +93,35 @@ public class ImageManager {
 		
 		grassdirtTileset[8] = ss.crop(2,2, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // bot right
 		grassdirtTileset[8] = createResizedCopy(grassdirtTileset[8], 64 ,64);
+		
+		//DARK COBBLE TILESET
+		
+		darkcobbleTileset[0] = ss.crop(0, 6, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		darkcobbleTileset[0] = createResizedCopy(darkcobbleTileset[0], 64, 64);
+		
+		darkcobbleTileset[1] = ss.crop(1, 6, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		darkcobbleTileset[1] = createResizedCopy(darkcobbleTileset[1], 64, 64);
+		
+		darkcobbleTileset[2] = ss.crop(2, 6, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		darkcobbleTileset[2] = createResizedCopy(darkcobbleTileset[2], 64, 64);
+		
+		darkcobbleTileset[3] = ss.crop(0, 7, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		darkcobbleTileset[3] = createResizedCopy(darkcobbleTileset[3], 64, 64);
+		
+		darkcobbleTileset[4] = ss.crop(1, 7, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		darkcobbleTileset[4] = createResizedCopy(darkcobbleTileset[4], 64, 64);
+		
+		darkcobbleTileset[5] = ss.crop(2, 7, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		darkcobbleTileset[5] = createResizedCopy(darkcobbleTileset[5], 64, 64);
+		
+		darkcobbleTileset[6] = ss.crop(0, 8, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		darkcobbleTileset[6] = createResizedCopy(darkcobbleTileset[6], 64, 64);
+		
+		darkcobbleTileset[7] = ss.crop(1, 8, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		darkcobbleTileset[7] = createResizedCopy(darkcobbleTileset[7], 64, 64);
+		
+		darkcobbleTileset[8] = ss.crop(2, 8, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		darkcobbleTileset[8] = createResizedCopy(darkcobbleTileset[8], 64, 64);
 		
 		// STONE TILESET
 		
@@ -179,6 +209,8 @@ public class ImageManager {
 			return miscTileset;
 		case "playersprites":
 			return playerSprites;
+		case "darkstone":
+			return darkcobbleTileset;
 		default:
 			System.out.println("Not a valid tileset");
 		}

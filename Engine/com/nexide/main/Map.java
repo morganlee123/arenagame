@@ -77,7 +77,7 @@ public class Map {
 					emptyTileMap[i][z] = tm.getTile("grasstile"); 
 					break;
 				case 1:
-					emptyTileMap[i][z] = tm.getTile("rocktile");
+					emptyTileMap[i][z] = tm.getTile("darkstone");
 					break;
 				case 2:
 					emptyTileMap[i][z] = tm.getTile("watertile");
@@ -86,7 +86,7 @@ public class Map {
 					emptyTileMap[i][z] = tm.getTile("sandtile");
 					break;
 				case 4:
-					emptyTileMap[i][z] = tm.getTile("cobbletile");
+					emptyTileMap[i][z] = tm.getTile("darkstone");
 					break;
 				case 5:
 					emptyTileMap[i][z] = tm.getTile("sandtile");
@@ -95,7 +95,7 @@ public class Map {
 					emptyTileMap[i][z] = tm.getTile("sandtile");
 					break;
 				case 7:
-					emptyTileMap[i][z] = tm.getTile("cobbletile");
+					emptyTileMap[i][z] = tm.getTile("darkstone");
 					break;
 				default:
 					System.out.println("error loading tile");

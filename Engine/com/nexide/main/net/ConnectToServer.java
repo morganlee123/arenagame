@@ -445,8 +445,8 @@ public class ConnectToServer implements Callable<String> {
             }
             
             public synchronized void run() {
-        
-                try {
+            	
+            	try {
                     PrintWriter Sout = new PrintWriter(socket.getOutputStream(), true);
                     BufferedReader Sin = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     

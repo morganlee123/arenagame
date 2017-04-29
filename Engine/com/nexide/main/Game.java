@@ -19,7 +19,7 @@ import com.nexide.main.net.ConnectToServer;
 public class Game extends Canvas implements Runnable {
 	
 	private static String TITLE = "morgan is the best engine programmer";
-	private static int WIDTH = 1024, HEIGHT = 768;
+	private static int WIDTH = 1280, HEIGHT = 800;
 
 	private boolean running = false;
 	private Thread gameThread;

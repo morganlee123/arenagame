@@ -1,10 +1,7 @@
 package com.nexide.main.entities;
 
-import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 
-import com.nexide.main.Game;
 import com.nexide.main.Map;
 import com.nexide.main.gfx.Animation;
 import com.nexide.main.gfx.ImageManager;
@@ -12,11 +9,11 @@ import com.nexide.main.gfx.ImageManager;
 public class TileManager {
 
 	private ImageManager im;
-	private Tile grasstile, rocktile, watertile, sandtile, cobbletile;
+	private Tile grasstile, stonetile, watertile, sandtile, darkcobbletile;
 
 	private Map map;
 	
-	private BufferedImage[] grassdirtTileset, grasssandTileset, miscTileset, stoneTileset;
+	private BufferedImage[] grassdirtTileset, grasssandTileset, miscTileset, stoneTileset, darkcobbleTileset;
 
 	public TileManager(ImageManager im){
 		this.im = im;
@@ -24,12 +21,13 @@ public class TileManager {
 		grasssandTileset = im.getTileset("grasssand");
 		miscTileset = im.getTileset("misc");
 		stoneTileset = im.getTileset("stone");
+		darkcobbleTileset = im.getTileset("darkstone");
 		
 		grasstile = new Tile(grassdirtTileset[4], false); // NORM GRASS
-		rocktile = new Tile(miscTileset[3], true); // ROCK
+		stonetile = new Tile(stoneTileset[4], false); // walkable stone
 		watertile = new Tile(new Animation(10, miscTileset[0], miscTileset[1], miscTileset[2]), true);
 		sandtile = new Tile(grasssandTileset[4], false); // SAND
-		cobbletile = new Tile(stoneTileset[4], true); // COBBLE
+		darkcobbletile = new Tile(darkcobbleTileset[4], true); // DARK BORDER stone 
 	}
 
 
@@ -38,15 +36,16 @@ public class TileManager {
 		switch(tile){
 		case "grasstile":
 			return grasstile;
-		case "rocktile":
-			return rocktile;
+		case "stonetile":
+			return stonetile;
 		case "watertile":
 			return watertile;
 		case "sandtile":
 			return sandtile;
-		case "cobbletile":
-			return cobbletile;
+		case "darkstone":
+			return darkcobbletile;
 		default:
+			System.out.println("DEFAULT TILE RETURNED");
 			return grasstile;
 		}
 	}
