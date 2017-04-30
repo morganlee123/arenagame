@@ -38,22 +38,60 @@ public class Map {
 		
 	}
 	
-	public void tick(Player player){
-		if(player.getCurrentDirection() == "up"){
+	public void tick(Player player, TileManager tman){
+		//System.out.println(xOffset + "," + yOffset);
+		int oldOffset = yOffset + xOffset;
+		if(player.getCurrentDirection() == "up" && isValidMove(xOffset, yOffset+yVel, tman)){ 
 			yOffset+=yVel;
-		}else if(player.getCurrentDirection() == "down"){
+		}else if(player.getCurrentDirection() == "down" && isValidMove(xOffset, yOffset - yVel, tman)){
 			yOffset-=yVel;
 		}
 
-		if(player.getCurrentDirection() == "right"){
+		if(player.getCurrentDirection() == "right" && isValidMove(xOffset-xVel, yOffset, tman)){
 			xOffset-=xVel;
-		}else if(player.getCurrentDirection() == "left"){
+		}else if(player.getCurrentDirection() == "left" && isValidMove(xOffset + xVel, yOffset, tman)){
 			xOffset+=xVel;
 		}
 		
-		//System.out.println("xOff: " + xOffset + ", yOff: " + yOffset);
+		if (oldOffset != yOffset+xOffset)
+			System.out.println("xOff: " + xOffset + ", yOff: " + yOffset + ", x: " + (0 - (xOffset - 640)) + ", y: " + (0 - (yOffset - 400)));
 	}
 
+	private boolean isValidMove(int xCoord, int yCoord, TileManager tman) {
+		
+		//1. Change the offsets into legitimate coordinates...
+		
+		int trueX = 0 - (xCoord - 640);
+		int trueY = 0 - (yCoord - 400);
+		int secondX = trueX + 64;
+		int secondY = trueY + 64;
+		
+		//2. Change the LEGITIMATE coordinates to tile numbers
+		
+		trueX = trueX/64;		//on purpose: rounds down 
+		trueY = trueY/64;
+		secondX = secondX/64;
+		secondY = secondY/64;
+		
+		
+		
+		Tile tiles[][] = convertIntMapToTileMap(intmap, tileMap, tman);
+		Tile tile = tiles[trueY][trueX];
+		if (tile.isSolid())
+			return false;
+		tile = tiles[trueY][secondX];
+		if (tile.isSolid())
+			return false;
+		tile = tiles[secondY][trueX];
+		if (tile.isSolid())
+			return false;
+		tile = tiles[secondY][secondX];
+		if (tile.isSolid())
+			return false;
+		
+		return true;
+	}
+	
 	public void render(Graphics g, Game game, TileManager tm){
 		tileMap = convertIntMapToTileMap(intmap, tileMap, tm);
 		for(int i = 0; i<54; i++)
@@ -107,4 +145,3 @@ public class Map {
 	}
 
 }
-
