@@ -45,9 +45,9 @@ public class ConnectToServer implements Callable<String> {
     private static PrintWriter out = null;   //sends messages to server
     private static Thread serverThread = null;
 
-    private static int startPosX[] = {1344 ,1536,1344,1536,1344,1536,1344,1536};
-    private static int startPosY[] = { 144, 144, 16, 16,49,49,51,51};
-    private static int ID = -1;
+    private static int startPosX[] = {-1344 ,-1536,-1344,-1536,-1344,-1536,-1344,-1536};
+    private static int startPosY[] = { 144  ,  144,   16,   16,  49,49,51,51};
+    public static int ID = -1;
     
     public static void initialize() {
         
@@ -282,6 +282,10 @@ public class ConnectToServer implements Callable<String> {
         private static ArrayList<Boolean> shooting = new ArrayList<Boolean>();
         private static ArrayList<Integer> shotTick = new ArrayList<Integer>();
         
+        private static int teamCapturing1 = 0;
+        private static int teamCapturing2 = 0;
+        private static int teamCapturing3 = 0;
+        
         private int BlueTeamScore = 0;
         private int RedTeamScore = 0;
         
@@ -303,6 +307,10 @@ public class ConnectToServer implements Callable<String> {
                 Thread discThread = new Thread(DiscoveryThread.getInstance());
                 discThread.start();
                 while (clients.size() < MAX_PARTY_SIZE ) {
+                    
+                    
+                    System.out.println("Awaiting Connections...");
+                    Thread temp = new ServerThread(serverSocket.accept(),clients.size());
                     unames.add("<awaiting connection>");
                     xCoords.add(startPosX[clients.size()]);
                     yCoords.add(startPosY[clients.size()]);
@@ -310,13 +318,11 @@ public class ConnectToServer implements Callable<String> {
                     rotation.add(0);
                     shooting.add(false);
                     shootStatus.add(0);
-                    
-                    System.out.println("Awaiting Connections...");
-                    Thread temp = new ServerThread(serverSocket.accept(),clients.size());
                     temp.start();
                     ServerLock.lock();
                     clients.add(temp);
                     ServerLock.unlock();
+                    
                     System.out.println("Clients = " + clients.size());
                 }
                 discThread.stop();
@@ -445,6 +451,8 @@ public class ConnectToServer implements Callable<String> {
                 THREAD_ID=threadID;
             }
             
+            public static int temp = 0;
+            
             public synchronized void run() {
             	
             	try {
@@ -459,11 +467,16 @@ public class ConnectToServer implements Callable<String> {
                     while (true) {
                         String input = Sin.readLine();
                         String output = "";
-                        System.out.print("input: " + input);
+                        //System.out.print("input: " + input);
                         if (input.equalsIgnoreCase("getUserPositions")) {
                             output = Server.getInstance().xCoords.get(0) + "," + Server.getInstance().yCoords.get(0);
-                            for(int i = 1; i < Server.getInstance().xCoords.size(); i++)
+                            for(int i = 1; i < Server.getInstance().xCoords.size(); i++) {
                                 output = output + "&" + Server.getInstance().xCoords.get(i) + "," + Server.getInstance().yCoords.get(i);
+                                int ttemp = Server.getInstance().xCoords.get(i) + Server.getInstance().yCoords.get(i);
+                                if (ttemp != temp)
+                                	System.out.println(output);
+                            	temp = ttemp;
+                            }
                         } else if (input.equalsIgnoreCase("getUserHealth")) {
                             output = "" + Server.getInstance().health.get(0);
                             for(int i = 1; i < Server.getInstance().xCoords.size(); i++)
@@ -479,7 +492,7 @@ public class ConnectToServer implements Callable<String> {
                             output = startPosX[THREAD_ID] + "&" + startPosY[THREAD_ID];
                         }else if (input.startsWith("sendInput")) {
                             String portions[] = input.split("/");
-                            System.out.println(portions.length);
+                            
                             Server.getInstance().rotation.set(THREAD_ID,Integer.parseInt(portions[1]));
                             Server.getInstance().xCoords.set(THREAD_ID,Integer.parseInt(portions[2]));
                             Server.getInstance().yCoords.set(THREAD_ID,Integer.parseInt(portions[3]));
@@ -495,7 +508,6 @@ public class ConnectToServer implements Callable<String> {
                         } else if (input.equalsIgnoreCase("getScore")) {
                             output = Server.getInstance().BlueTeamScore + "&" + Server.getInstance().RedTeamScore;
                         }
-                        System.out.println(", Output: " + output);
                         Sout.println(output);
                     }
                     
