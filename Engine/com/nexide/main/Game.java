@@ -161,7 +161,7 @@ public class Game extends Canvas implements Runnable {
 	
 	private void tick(){
 		player.tick();
-		testMap.tick(player);
+		testMap.tick(player,tm);
 	}
 	
 	private void render(){
