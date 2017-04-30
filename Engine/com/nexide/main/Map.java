@@ -147,8 +147,8 @@ public class Map {
 							if (!(ConnectToServer.ID + ": DRAWING @" + UPs.split("&")[i] + " -> " + newX + "," + newY).equals(debugOld01))
 								System.out.println(ConnectToServer.ID + ": DRAWING @" + UPs.split("&")[i] + " -> " + newX + "," + newY);
 							debugOld01 = ConnectToServer.ID + ": DRAWING @" + UPs.split("&")[i] + " -> " + newX + "," + newY;
-							if (ConnectToServer.ID < 4) g.setColor(Color.BLUE);
-							if (ConnectToServer.ID >= 4) g.setColor(Color.RED);
+							if (i < 4) g.setColor(Color.BLUE);
+							if (i >= 4) g.setColor(Color.RED);
 							g.fillOval(newX, newY , 64, 64);
 						}
 				} catch (IOException e) {
@@ -156,7 +156,37 @@ public class Map {
 					e.printStackTrace();
 				}
 				
-				//now we get positions of bullets
+				//now draw health bar...
+				int HEALTH = 100;
+				//color goes from 00FF00 to FFFF00 to FF0000, or 0,255,0 to 255,255,0 to 255,0,0
+				try {
+					ConnectToServer.send("getHealth");
+					HEALTH = Integer.parseInt(ConnectToServer.receive());
+				
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				int ColorR = 0;
+				if (HEALTH < 50)
+					ColorR = (int)((double)HEALTH * (255.0/50.0));
+				else
+					ColorR = (int)(255.0 - (((double)HEALTH - 50.0) * (255.0/50.0)));
+				int ColorG = (int)(((double)HEALTH - 50.0) * (255.0/50.0));
+				if (ColorR > 255)
+					ColorR = 255;
+				if (ColorG > 255)
+					ColorG = 255;
+				if (ColorR < 0)
+					ColorR = 0;
+				if (ColorG < 0)
+					ColorG = 0;
+				int ColorB = 0;
+				
+				g.setColor(Color.BLACK);
+				g.fillRect(1100, 50, 120, 50);
+				g.setColor(new Color(ColorR, ColorG, ColorB));
+				g.fillRect(1110, 60, HEALTH, 30);
 	} 
 	
 	public boolean onScreen(String coords) {
