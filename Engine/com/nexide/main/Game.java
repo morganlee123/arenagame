@@ -113,6 +113,19 @@ public class Game extends Canvas implements Runnable {
 		
 		ConnectToServer.initialize();
 		
+		int x = -1344;
+		int y = 144;
+		try {
+			ConnectToServer.send("Respawn");
+			String coords = ConnectToServer.receive();
+			x = Integer.parseInt(coords.split("&")[0]);
+			y = Integer.parseInt(coords.split("&")[1]);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		testMap.setOffset(x, y);
+		
 		player = new Player(this.getWidth() / 2, this.getHeight() / 2, im.getTileset("playersprites"));
 		
 	}
