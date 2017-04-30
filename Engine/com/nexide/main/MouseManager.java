@@ -2,20 +2,21 @@ package com.nexide.main;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 import com.nexide.main.entities.Player;
+import com.nexide.main.net.ConnectToServer;
 
 public class MouseManager implements MouseListener {
 
 	public void mouseClicked(MouseEvent e) {
-		Player.shooting = true;
 		try {
-			Thread.sleep(17);
-		} catch (InterruptedException e1) {
+			ConnectToServer.send("Shoot");
+			ConnectToServer.receive();
+		} catch (IOException e2) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			e2.printStackTrace();
 		}
-		Player.shooting = false;
 	}
 
 	public void mouseEntered(MouseEvent e) {
