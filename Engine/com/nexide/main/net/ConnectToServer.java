@@ -42,11 +42,11 @@ public class ConnectToServer implements Callable<String> {
     
     private static Socket mSocket = null;    //mSocket is the main socket
     private static BufferedReader in = null; //receives server messages
-    private static PrintWriter out = null;   //sends messaqges to server
+    private static PrintWriter out = null;   //sends messages to server
     private static Thread serverThread = null;
 
-    private static double startPosX[] = {31,34,31,34,31,34,31,34};
-    private static double startPosY[] = { 4, 4, 6, 6,49,49,51,51};
+    private static int startPosX[] = {1344 ,1536,1344,1536,1344,1536,1344,1536};
+    private static int startPosY[] = { 144, 144, 16, 16,49,49,51,51};
     private static int ID = -1;
     
     public static void initialize() {
@@ -271,16 +271,16 @@ public class ConnectToServer implements Callable<String> {
         
         public ReentrantLock ServerLock = new ReentrantLock(true);
         
-        private ArrayList<Thread> clients = new ArrayList<Thread>();
-        private ArrayList<String> unames = new ArrayList<String>(); //Requires Lock
-        private ArrayList<Double> xCoords = new ArrayList<Double>(); //Requires Lock
-        private ArrayList<Double> yCoords = new ArrayList<Double>(); //Requires Lock
-        private ArrayList<Integer> health = new ArrayList<Integer>();
-        private ArrayList<Integer> rotation = new ArrayList<Integer>();
-        private ArrayList<Integer> shootStatus = new ArrayList<Integer>();
-        private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-        private ArrayList<Boolean> shooting = new ArrayList<Boolean>();
-        private ArrayList<Integer> shotTick = new ArrayList<Integer>();
+        private static ArrayList<Thread> clients = new ArrayList<Thread>();
+        private static ArrayList<String> unames = new ArrayList<String>(); //Requires Lock
+        private static ArrayList<Integer> xCoords = new ArrayList<Integer>(); //Requires Lock
+        private static ArrayList<Integer> yCoords = new ArrayList<Integer>(); //Requires Lock
+        private static ArrayList<Integer> health = new ArrayList<Integer>();
+        private static ArrayList<Integer> rotation = new ArrayList<Integer>();
+        private static ArrayList<Integer> shootStatus = new ArrayList<Integer>();
+        private static ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+        private static ArrayList<Boolean> shooting = new ArrayList<Boolean>();
+        private static ArrayList<Integer> shotTick = new ArrayList<Integer>();
         
         private int BlueTeamScore = 0;
         private int RedTeamScore = 0;
@@ -308,6 +308,7 @@ public class ConnectToServer implements Callable<String> {
                     yCoords.add(startPosY[clients.size()]);
                     health.add(100);
                     rotation.add(0);
+                    shooting.add(false);
                     shootStatus.add(0);
                     
                     System.out.println("Awaiting Connections...");
@@ -458,6 +459,7 @@ public class ConnectToServer implements Callable<String> {
                     while (true) {
                         String input = Sin.readLine();
                         String output = "";
+                        System.out.print("input: " + input);
                         if (input.equalsIgnoreCase("getUserPositions")) {
                             output = Server.getInstance().xCoords.get(0) + "," + Server.getInstance().yCoords.get(0);
                             for(int i = 1; i < Server.getInstance().xCoords.size(); i++)
@@ -466,20 +468,23 @@ public class ConnectToServer implements Callable<String> {
                             output = "" + Server.getInstance().health.get(0);
                             for(int i = 1; i < Server.getInstance().xCoords.size(); i++)
                                 output = output + "&" + Server.getInstance().health.get(i);
+                        } else if (input.equalsIgnoreCase("getHealth")) {
+                        	output = "" + health.get(THREAD_ID);
                         } else if(input.equalsIgnoreCase("getTick")) {
-                            output = "" + Server.getInstance().tick;
+                        	output = "" + Server.getInstance().tick;
                         } else if (input.equalsIgnoreCase("Respawn")) {
                             Server.getInstance().xCoords.set(THREAD_ID,startPosX[THREAD_ID]);
                             Server.getInstance().yCoords.set(THREAD_ID,startPosY[THREAD_ID]);
                             Server.getInstance().health.set(THREAD_ID,100);
                             output = startPosX[THREAD_ID] + "&" + startPosY[THREAD_ID];
                         }else if (input.startsWith("sendInput")) {
-                            String portions[] = input.split("&");
+                            String portions[] = input.split("/");
+                            System.out.println(portions.length);
                             Server.getInstance().rotation.set(THREAD_ID,Integer.parseInt(portions[1]));
-                            Server.getInstance().xCoords.set(THREAD_ID,Double.parseDouble(portions[2]));
-                            Server.getInstance().yCoords.set(THREAD_ID,Double.parseDouble(portions[3]));
+                            Server.getInstance().xCoords.set(THREAD_ID,Integer.parseInt(portions[2]));
+                            Server.getInstance().yCoords.set(THREAD_ID,Integer.parseInt(portions[3]));
                             Server.getInstance().shooting.set(THREAD_ID,Boolean.parseBoolean(portions[4]));
-                            output = "Success.";
+                            output = "success";
                         } else if (input.equalsIgnoreCase("getBulletPositions")) {
                             if (Server.getInstance().bullets.size() < 1)
                                 output = "no bullets.";
@@ -490,6 +495,7 @@ public class ConnectToServer implements Callable<String> {
                         } else if (input.equalsIgnoreCase("getScore")) {
                             output = Server.getInstance().BlueTeamScore + "&" + Server.getInstance().RedTeamScore;
                         }
+                        System.out.println(", Output: " + output);
                         Sout.println(output);
                     }
                     
