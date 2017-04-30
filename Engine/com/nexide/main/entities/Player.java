@@ -13,8 +13,9 @@ public class Player implements Entity {
 	private BufferedImage[] playerSprites;
 	private BufferedImage currentDirection;
 	private int x, y;
+	public static int direction = 0;
 	public static boolean up, left, right, down, shooting;
-
+	public static int health;
 	
 	public Player(int x, int y, BufferedImage[] playerSprites){
 		this.playerSprites = playerSprites;
@@ -58,7 +59,15 @@ public class Player implements Entity {
 			}
 		}
 
-
+		if (up) {
+			direction = 0;
+		} else if (down) {
+			direction = 180;
+		} else if (left) {
+			direction = 270;
+		} else if (right) {
+			direction = 360;
+		}
 
 		//System.out.println(mouseX + ", " + mouseY);
 	}
