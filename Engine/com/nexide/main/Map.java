@@ -58,7 +58,7 @@ public class Map {
 		}
 		
 		
-		if (oldOffset != yOffset+xOffset)
+		//if (oldOffset != yOffset+xOffset)
 			//System.out.println("xOff: " + xOffset + ", yOff: " + yOffset + ", x: " + (0 - (xOffset - 640)) + ", y: " + (0 - (yOffset - 400)));
 		
 		//System.out.println("xOff: " + xOffset + ", yOff: " + yOffset);
@@ -69,8 +69,8 @@ public class Map {
 			ConnectToServer.receive();
 			ConnectToServer.send("getHealth");
 			Player.health = Integer.parseInt(ConnectToServer.receive());
-			//if (Player.health <= 0)
-				//reset(player);
+			if (Player.health <= 0)
+				reset(player);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -79,6 +79,18 @@ public class Map {
 		
 	}
 
+	private void respawn() {
+		try {
+			ConnectToServer.send("Respawn");
+			String coords = ConnectToServer.receive();
+			xOffset = Integer.parseInt(coords.split("&")[0]);
+			yOffset = Integer.parseInt(coords.split("&")[0]);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	private boolean isValidMove(int xCoord, int yCoord, TileManager tman) {
 		
 		//1. Change the offsets into legitimate coordinates...
@@ -122,7 +134,7 @@ public class Map {
 		return true;
 	}
 	
-	private String debugOld01 = "void";
+	private String debugOld01 = "void like Morgan's soul"; //lol, this will autofix itself
 	
 	public void render(Graphics g, Game game, TileManager tm, ImageManager im){
 		if ((TMisInit = !TMisInit))
