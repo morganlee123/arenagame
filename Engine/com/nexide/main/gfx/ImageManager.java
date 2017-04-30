@@ -10,12 +10,12 @@ public class ImageManager {
 	
 	public int DEFAULT_TILESIZE = 16;
 	
-	private BufferedImage[] grasssandTileset = new BufferedImage[9];
+	private BufferedImage[] grasssandTileset = new BufferedImage[13];
 	private BufferedImage[] grassdirtTileset = new BufferedImage[9];
-	private BufferedImage[] stoneTileset = new BufferedImage[9];
+	private BufferedImage[] stoneTileset = new BufferedImage[13];
 	private BufferedImage[] miscTileset = new BufferedImage[9];
 	private BufferedImage[] playerSprites = new BufferedImage[12];
-	private BufferedImage[] darkcobbleTileset = new BufferedImage[9];
+	private BufferedImage[] darkcobbleTileset = new BufferedImage[13];
 	
 	public ImageManager(SpriteSheet ss){
 		this.ss = ss;
@@ -120,8 +120,20 @@ public class ImageManager {
 		darkcobbleTileset[7] = ss.crop(1, 8, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
 		darkcobbleTileset[7] = createResizedCopy(darkcobbleTileset[7], 64, 64);
 		
-		darkcobbleTileset[8] = ss.crop(2, 8, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		darkcobbleTileset[8] = ss.crop(2, 8, DEFAULT_TILESIZE, DEFAULT_TILESIZE); 
 		darkcobbleTileset[8] = createResizedCopy(darkcobbleTileset[8], 64, 64);
+		
+		darkcobbleTileset[9] = ss.crop(3, 7, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // TOP LEFT ELBOW
+		darkcobbleTileset[9] = createResizedCopy(darkcobbleTileset[9], 64, 64);
+		
+		darkcobbleTileset[10] = ss.crop(4, 7, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // TOP RIGHT ELBOW
+		darkcobbleTileset[10] = createResizedCopy(darkcobbleTileset[10], 64, 64);
+		
+		darkcobbleTileset[11] = ss.crop(3, 8, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // BOT LEFT ELBOW
+		darkcobbleTileset[11] = createResizedCopy(darkcobbleTileset[11], 64, 64);
+		
+		darkcobbleTileset[12] = ss.crop(4, 8, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // BOT RIGHT ELBOW
+		darkcobbleTileset[12] = createResizedCopy(darkcobbleTileset[12], 64, 64);
 		
 		// STONE TILESET
 		
@@ -152,6 +164,18 @@ public class ImageManager {
 		stoneTileset[8] = ss.crop(2,5, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // bot right
 		stoneTileset[8] = createResizedCopy(stoneTileset[8], 64 ,64);
 		
+		stoneTileset[9] = ss.crop(3, 4, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // TOP LEFT ELBOW
+		stoneTileset[9] = createResizedCopy(stoneTileset[9], 64 ,64);
+		
+		stoneTileset[10] = ss.crop(4, 4, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // TOP RIGHT ELBOW
+		stoneTileset[10] = createResizedCopy(stoneTileset[10], 64 ,64);
+		
+		stoneTileset[11] = ss.crop(3, 5, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // BOT LEFT ELBOW
+		stoneTileset[11] = createResizedCopy(stoneTileset[11], 64 ,64);
+		
+		stoneTileset[12] = ss.crop(4, 5, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // BOT RIGHT ELBOW
+		stoneTileset[12] = createResizedCopy(stoneTileset[12], 64 ,64);
+		
 		// GRASS SAND TILESET
 		grasssandTileset[0] = ss.crop(5, 0, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
 		grasssandTileset[0] = createResizedCopy(grasssandTileset[0], 64, 64); //top left
@@ -179,6 +203,18 @@ public class ImageManager {
 	 
 		grasssandTileset[8] = ss.crop(7,2, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
 		grasssandTileset[8] = createResizedCopy(grasssandTileset[8], 64, 64); // bot right
+		
+		grasssandTileset[9] = ss.crop(8,1, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		grasssandTileset[9] = createResizedCopy(grasssandTileset[9], 64, 64); // TOP LEFT ELBOW
+		
+		grasssandTileset[10] = ss.crop(9,1, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		grasssandTileset[10] = createResizedCopy(grasssandTileset[10], 64, 64); // TOP RIGHT ELBOW
+		
+		grasssandTileset[11] = ss.crop(8,2, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		grasssandTileset[11] = createResizedCopy(grasssandTileset[11], 64, 64); // BOT LEFT ELBOW
+		
+		grasssandTileset[12] = ss.crop(9,2, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		grasssandTileset[12] = createResizedCopy(grasssandTileset[12], 64, 64); // BOT RIGHT ELBOW
 		
 		// MISC TILES
 		
