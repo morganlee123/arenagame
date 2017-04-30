@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.nexide.main.Game;
+
 public class ImageLoader {
 
 	public ImageLoader(){
@@ -14,7 +16,7 @@ public class ImageLoader {
 	
 	public BufferedImage loadImage(String path){
 		try {
-			return ImageIO.read(new File(path));
+			return ImageIO.read(Game.class.getResource(path));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
