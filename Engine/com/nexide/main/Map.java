@@ -79,6 +79,11 @@ public class Map {
 		
 	}
 
+	public void setOffset(int x, int y) {
+		xOffset = x;
+		yOffset = y;
+	}
+	
 	private void respawn() {
 		try {
 			ConnectToServer.send("Respawn");
