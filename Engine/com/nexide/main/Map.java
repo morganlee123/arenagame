@@ -121,6 +121,8 @@ public class Map {
 		return true;
 	}
 	
+	private String debugOld01 = "void";
+	
 	public void render(Graphics g, Game game, TileManager tm){
 		if ((TMisInit = !TMisInit))
 			tileMap = convertIntMapToTileMap(intmap, tileMap, tm);
@@ -142,8 +144,9 @@ public class Map {
 						if (onScreen(UPs.split("&")[i])) {
 							int newX = xOffset - Integer.parseInt(UPs.split("&")[i].split(",")[0]) + 640;
 							int newY = yOffset - Integer.parseInt(UPs.split("&")[i].split(",")[1]) + 400;
-							System.out.println(ConnectToServer.ID + ": DRAWING @" + UPs.split("&")[i] + " -> " + newX + "," + newY);
-						
+							if (!(ConnectToServer.ID + ": DRAWING @" + UPs.split("&")[i] + " -> " + newX + "," + newY).equals(debugOld01))
+								System.out.println(ConnectToServer.ID + ": DRAWING @" + UPs.split("&")[i] + " -> " + newX + "," + newY);
+							debugOld01 = ConnectToServer.ID + ": DRAWING @" + UPs.split("&")[i] + " -> " + newX + "," + newY;
 							if (ConnectToServer.ID < 4) g.setColor(Color.BLUE);
 							if (ConnectToServer.ID >= 4) g.setColor(Color.RED);
 							g.fillOval(newX, newY , 64, 64);
