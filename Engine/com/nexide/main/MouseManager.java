@@ -9,6 +9,13 @@ public class MouseManager implements MouseListener {
 
 	public void mouseClicked(MouseEvent e) {
 		Player.shooting = true;
+		try {
+			Thread.sleep(17);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		Player.shooting = false;
 	}
 
 	public void mouseEntered(MouseEvent e) {
