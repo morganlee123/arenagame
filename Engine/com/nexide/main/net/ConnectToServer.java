@@ -1,28 +1,30 @@
 package com.nexide.main.net;
 
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.ReentrantLock;
-import java.net.Socket;
-import java.net.ServerSocket;
-import java.net.UnknownHostException;
-import java.net.DatagramSocket;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.InterfaceAddress;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class ConnectToServer implements Callable<String> {
     //Each tick, client should... send next movement to server
@@ -289,11 +291,7 @@ public class ConnectToServer implements Callable<String> {
         private static ArrayList<Bullet> bullets = new ArrayList<Bullet>();
         private static ArrayList<Boolean> shooting = new ArrayList<Boolean>();
         private static ArrayList<Integer> shotTick = new ArrayList<Integer>();
-        
-        private static int teamCapturing1 = 0;
-        private static int teamCapturing2 = 0;
-        private static int teamCapturing3 = 0;
-        
+
         private int BlueTeamScore = 0;
         private int RedTeamScore = 0;
         
@@ -377,7 +375,6 @@ public class ConnectToServer implements Callable<String> {
                 }
 
                 System.out.println("Red: " + (RedTeamScore/30) + " Blue: " + (BlueTeamScore/30));
-                
                 
                 //2. update the bullets
                 
@@ -585,7 +582,7 @@ public class ConnectToServer implements Callable<String> {
                             for (int i = 1; i < Server.getInstance().bullets.size(); i++)
                                 output = output + "&" + Server.getInstance().bullets.get(i).getX() + "," + Server.getInstance().bullets.get(i).getY();
                         } else if (input.equalsIgnoreCase("getScore")) {
-                            output = Server.getInstance().BlueTeamScore + "&" + Server.getInstance().RedTeamScore;
+                            output = Server.getInstance().BlueTeamScore/30 + "&" + Server.getInstance().RedTeamScore / 30;
                         }
                         Sout.println(output);
                     }

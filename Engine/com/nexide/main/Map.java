@@ -201,6 +201,7 @@ public class Map {
 				g.fillRect(1100, 50, 120, 50);
 				g.setColor(new Color(ColorR, ColorG, ColorB));
 				g.fillRect(1110, 60, HEALTH, 30);
+				
 	} 
 	
 	public boolean onScreen(String coords) {
