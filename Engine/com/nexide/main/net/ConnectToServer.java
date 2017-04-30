@@ -46,7 +46,7 @@ public class ConnectToServer implements Callable<String> {
     private static Thread serverThread = null;
 
     private static int startPosX[] = {-1344 ,-1536,-1344,-1536,-1344,-1536,-1344,-1536};
-    private static int startPosY[] = { 144  ,  144,   16,   16,  49,49,51,51};
+    private static int startPosY[] = { 144  ,  144,   16,   16,-2736,-2736,-2864,-2864};
     public static int ID = -1;
     
     public static void initialize() {
@@ -100,6 +100,17 @@ public class ConnectToServer implements Callable<String> {
         return in.readLine();
     }
     
+    public static int getTick() {
+    	try {
+			send("getTick");
+			return Integer.parseInt(receive());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return 0;
+    }
+    
     public static String receive(int timeout) throws IOException{
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<String> future = executor.submit(new timeoutReceiver());
@@ -149,9 +160,9 @@ public class ConnectToServer implements Callable<String> {
     }
 
     public String call() throws Exception {
-        try {
+        try (DatagramSocket c = new DatagramSocket()){
             //Open a random port to send the package
-            DatagramSocket c = new DatagramSocket();
+            
             c.setBroadcast(true);
             byte[] sendData = ("RESPOND_AVAIL_SERV_" + fetchIP()).getBytes();
             //Try the 255.255.255.255 first
@@ -227,9 +238,6 @@ public class ConnectToServer implements Callable<String> {
                 
                 BufferedReader stdInput = new BufferedReader(new 
                      InputStreamReader(proc.getInputStream()));
-                
-                BufferedReader stdError = new BufferedReader(new 
-                     InputStreamReader(proc.getErrorStream()));
                 
                 // read the output from the command
                 String s = null;
@@ -356,13 +364,28 @@ public class ConnectToServer implements Callable<String> {
                 
                 //2. update the bullets
                 
+                //lol I never MADE the bullets
+                boolean isShoot = false;
+                for (int i = 0 ; i < shooting.size(); i++)
+                	if (shooting.get(i)) {
+                		bullets.add(new Bullet(xCoords.get(i),yCoords.get(i),rotation.get(i),i));
+                		isShoot = true;
+                	}
+                if (isShoot) {
+                	System.out.println("Someone's shooting");
                 
-                for(int i = bullets.size() - 1; i >= 0; i++) {
-                    if (bullets.get(i).shouldDispose())
-                        bullets.remove(i);
-                    else
-                        bullets.get(i).updatePosition();
                 }
+                for(int i = bullets.size() - 1; i >= 0; i--) {
+                    if (bullets.get(i).shouldDispose()) {
+                        bullets.remove(i);
+                        System.out.println("DELETED: BULLET");
+                    }
+                    else {
+                        bullets.get(i).updatePosition();
+                        System.out.println("UPDATED BULLET");
+                    }
+                }
+                if (bullets.size() > 0) System.out.println("updated " + bullets.size() + " bullets");
                 
                 //3. update the health
                 
@@ -377,13 +400,13 @@ public class ConnectToServer implements Callable<String> {
                     try{Thread.sleep((long)(mspt-FIN));}catch (Exception e) {}
                 FIN = System.currentTimeMillis() - START;
                 tick++;
-                if ((tick != 0) && (tick % 60 == 0))
+                if ((tick != 0) && (tick % 120 == 0))
                     System.out.println("Sample frame's FPS: " + 1/(FIN/1000));
             }
         }
         
         private static class Bullet {
-            private static final int BULLETSPEED = 400 / TPS; //400 Meters per second = ~13 meters per tick @ 30TPS
+            private static final int BULLETSPEED = 64 * (400 / TPS); //400 Meters per second = ~13 meters per tick @ 30TPS
             
             private double xVelocity;
             private double yVelocity;
@@ -394,6 +417,7 @@ public class ConnectToServer implements Callable<String> {
             private int userID;
             
             public Bullet(double startX, double startY, int degreesRotation, int uid) {
+            	System.out.println("CREATED: BULLET");
                 currentX=startX; 
                 currentY=startY;
                 xVelocity = BULLETSPEED*Math.cos(Math.toRadians(degreesRotation));
@@ -413,7 +437,7 @@ public class ConnectToServer implements Callable<String> {
             
             public void appendHealth() {
                 for (int i = 0; i < Server.getInstance().xCoords.size(); i++) {
-                    if (inLine(currentX,currentY,previousY,previousX,Server.getInstance().xCoords.get(i),Server.getInstance().yCoords.get(i))) {
+                    if (inLine(currentX,currentY,previousY,previousX,i)) {
                         System.out.println("HIT: User = " + Server.getInstance().unames.get(i));
                         Server.getInstance().health.set(i,Server.getInstance().health.get(i) - HEALTH_DROP);
                     }
@@ -421,24 +445,55 @@ public class ConnectToServer implements Callable<String> {
             }
             
             public boolean shouldDispose() {
-                return (currentX > 64 || currentX < 0 || currentY > 54 || currentY < 0);
+            	System.out.println("448-CTS x: " + currentX + "y: " + currentY);
+                return (currentX > 64*64 || currentX < 0 || currentY > 54*64 || currentY < 0*64);
             }
             
-            private static boolean inLine(double Ax, double Ay, double Bx, double By, double Cx, double Cy) { //a and b are bullet path, c is player
-               //1. is it between A and B?
-               if (!((Ax <= Cx && Cx < Bx) || (Ax >= Cx && Cx > Bx))) {
-                   return false;
-               }
-               if (!((Ay <= Cy && Cy < By) || (Ay >= Cy && Cy > By))) {
-                   return false;
-               }
+            private static boolean inLine(double x, double y, double oldX, double oldY,int playerID) { //a and b are bullet path, c is player
                
-               //2. does it have the same slope as A and B?
-               //   a) Vertical?
-               if (Ax == Cx) return Bx == Cx;
-               if (Bx == Cx) return Ax == Cx;
-               //   b) same slope?
-               return (Ay - Cy)/(Ax - Cx) == (Cy - By)/(Cx - Bx);
+            	//1. is the player between the endpoints of the bullets, give or take 32 px.
+            	double smallStartX = x - 32;
+            	double largeStartX = x + 32;
+            	double smallStartY = y - 32;
+            	double largeStartY = y + 32;
+            	double smallEndX = oldX - 32;
+            	double largeEndX = oldX + 32;
+            	double smallEndY = oldY - 32;
+            	double largeEndY = oldY + 32;
+            	if (smallStartY > smallEndY)
+            		smallStartY = smallEndY;
+            	if (smallStartX > smallEndX)
+            		smallStartX = smallEndX;
+            	if (largeStartY < largeEndY)
+            		largeStartY = largeEndY;
+            	if (largeStartX < largeEndX)
+            		largeStartX = largeEndX;
+            	
+            	int playerX = xCoords.get(playerID);
+            	int playerY = yCoords.get(playerID);
+            	
+            	System.out.println(smallStartX + "<" + playerX + "<" + largeStartX);
+            	System.out.println(smallStartY + "<" + playerX + "<" + largeStartY);
+            	
+            	if (smallStartX <= playerX && largeStartX >= playerX && smallStartY <= playerY && largeStartY >= playerY)
+            		return true;
+
+            	return false;
+//            	
+//            	//1. is it between A and B?
+//               if (!((Ax <= Cx && Cx < Bx) || (Ax >= Cx && Cx > Bx))) {
+//                   return false;
+//               }
+//               if (!((Ay <= Cy && Cy < By) || (Ay >= Cy && Cy > By))) {
+//                   return false;
+//               }
+//               
+//               //2. does it have the same slope as A and B?
+//               //   a) Vertical?
+//               if (Ax == Cx) return Bx == Cx;
+//               if (Bx == Cx) return Ax == Cx;
+//               //   b) same slope?
+//               return (Ay - Cy)/(Ax - Cx) == (Cy - By)/(Cx - Bx);
             }
         }
         
@@ -474,8 +529,8 @@ public class ConnectToServer implements Callable<String> {
                                 output = output + "&" + Server.getInstance().xCoords.get(i) + "," + Server.getInstance().yCoords.get(i);
                                 int ttemp = Server.getInstance().xCoords.get(i) + Server.getInstance().yCoords.get(i);
                                 if (ttemp != temp)
-                                	System.out.println(output);
-                            	temp = ttemp;
+                                	//System.out.println(output);
+                            	temp = ttemp; 
                             }
                         } else if (input.equalsIgnoreCase("getUserHealth")) {
                             output = "" + Server.getInstance().health.get(0);
@@ -483,8 +538,15 @@ public class ConnectToServer implements Callable<String> {
                                 output = output + "&" + Server.getInstance().health.get(i);
                         } else if (input.equalsIgnoreCase("getHealth")) {
                         	output = "" + health.get(THREAD_ID);
+                        } else if (input.equalsIgnoreCase("getDirections")) {
+                        	output = "" + Server.getInstance().rotation.get(0);
+                        	for (int i = 0; i < Server.getInstance().rotation.size(); i++)
+                        		output = output + "&" + Server.getInstance().rotation.get(i);
                         } else if(input.equalsIgnoreCase("getTick")) {
+                        
                         	output = "" + Server.getInstance().tick;
+                        } else if (input.equalsIgnoreCase("shoot")) {
+                        	bullets.add(new Bullet(xCoords.get(ID),yCoords.get(ID),rotation.get(ID),ID));
                         } else if (input.equalsIgnoreCase("Respawn")) {
                             Server.getInstance().xCoords.set(THREAD_ID,startPosX[THREAD_ID]);
                             Server.getInstance().yCoords.set(THREAD_ID,startPosY[THREAD_ID]);
@@ -528,7 +590,7 @@ public class ConnectToServer implements Callable<String> {
             
             public void run() {
                 try {
-                    //Keep a socket open to listen to all the UDP trafic that is destined for this port
+                    //Keep a socket open to listen to all the UDP traffic that is destined for this port
                     socket = new DatagramSocket(42317, InetAddress.getByName("0.0.0.0"));
                     socket.setBroadcast(true);
                     System.out.println("Running DiscoveryThread!");
