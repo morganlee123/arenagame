@@ -140,10 +140,13 @@ public class Map {
 					String UPs = ConnectToServer.receive();
 					for(int i = 0; i < UPs.split("&").length; i++) 
 						if (onScreen(UPs.split("&")[i])) {
-							System.out.println("DRAWONG");
+							int newX = xOffset - Integer.parseInt(UPs.split("&")[i].split(",")[0]) + 640;
+							int newY = yOffset - Integer.parseInt(UPs.split("&")[i].split(",")[1]) + 400;
+							System.out.println(ConnectToServer.ID + ": DRAWING @" + UPs.split("&")[i] + " -> " + newX + "," + newY);
+						
 							if (ConnectToServer.ID < 4) g.setColor(Color.BLUE);
 							if (ConnectToServer.ID >= 4) g.setColor(Color.RED);
-							g.fillOval(0-(Integer.parseInt(UPs.split("&")[i].split(",")[0]) - 640),0-(Integer.parseInt(UPs.split("&")[i].split(",")[1]) - 400) , 64, 64);
+							g.fillOval(newX, newY , 64, 64);
 						}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
