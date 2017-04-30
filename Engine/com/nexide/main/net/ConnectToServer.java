@@ -272,6 +272,7 @@ public class ConnectToServer implements Callable<String> {
         }
     }
     
+    
     private static class Server implements Runnable {
         private int port = 4444; //accessed by gsp
         private int tick = -2; //signifies waiting for players
@@ -280,6 +281,9 @@ public class ConnectToServer implements Callable<String> {
         private static Server s = new Server(); //accessed by getInstance
         
         public ReentrantLock ServerLock = new ReentrantLock(true);
+        
+        private static Rectangle enemy1, enemy2, enemy3, enemy4;
+        private static boolean s1 = false;
         
         private static ArrayList<Thread> clients = new ArrayList<Thread>();
         private static ArrayList<String> unames = new ArrayList<String>(); //Requires Lock
@@ -348,13 +352,30 @@ public class ConnectToServer implements Callable<String> {
             while (isRunning) {
                 long START = System.currentTimeMillis();
                 
-                //1. update the scores
-                
-                  Rectangle leftzone, rightzone, midzone;
+     
+                Rectangle leftzone, rightzone, midzone;
                 
                 leftzone = new Rectangle((5*64), (24*64), (10*64), (8*64));
                 midzone = new Rectangle((30*64), (22*64), (6*64), (12*64));
                 rightzone = new Rectangle((51*64),(24*64), (10*64), (8*64));
+                
+                // 0. update where the player hitboxes are
+                
+                if (ID > 3) {
+                	enemy1 = new Rectangle(0-(xCoords.get(0)-640),0-(yCoords.get(0)-400),64,64);
+                	enemy2 = new Rectangle(0-(xCoords.get(1)-640),0-(yCoords.get(1)-400),64,64);
+                	enemy3 = new Rectangle(0-(xCoords.get(2)-640),0-(yCoords.get(2)-400),64,64);
+                	enemy4 = new Rectangle(0-(xCoords.get(3)-640),0-(yCoords.get(3)-400),64,64);
+                } else {
+                	enemy1 = new Rectangle(0-(xCoords.get(4)-640),0-(yCoords.get(4)-400),64,64);
+                	enemy2 = new Rectangle(0-(xCoords.get(5)-640),0-(yCoords.get(5)-400),64,64);
+                	enemy3 = new Rectangle(0-(xCoords.get(6)-640),0-(yCoords.get(6)-400),64,64);
+                	enemy4 = new Rectangle(0-(xCoords.get(7)-640),0-(yCoords.get(7)-400),64,64);
+                	s1 = false;
+                }
+                
+                //1. update the scores
+                
                 
                 for (int i = 0; i < 4; i++) {
                     if (leftzone.contains(new Point(0-(xCoords.get(i)-640), 0-(yCoords.get(i)-400))))
@@ -560,47 +581,28 @@ public class ConnectToServer implements Callable<String> {
                         
                         	output = "" + Server.getInstance().tick;
                         } else if (input.equalsIgnoreCase("shoot")) {
-                        	//bullets.add(new Bullet(xCoords.get(ID),yCoords.get(ID),rotation.get(ID),ID));
-                        	Rectangle enemy1 = null;
-                            Rectangle enemy2 = null;
-                            Rectangle enemy3 = null;
-                            Rectangle enemy4 = null;
-                            boolean s1 = true;
                             
-                            if (ID > (3)) {
-                            	enemy1 = new Rectangle(0-(xCoords.get(0)-640),0-(yCoords.get(0)-400),64,64);
-                            	enemy2 = new Rectangle(0-(xCoords.get(1)-640),0-(yCoords.get(1)-400),64,64);
-                            	enemy3 = new Rectangle(0-(xCoords.get(2)-640),0-(yCoords.get(2)-400),64,64);
-                            	enemy4 = new Rectangle(0-(xCoords.get(3)-640),0-(yCoords.get(3)-400),64,64);
-                            } else {
-                            	enemy1 = new Rectangle(0-(xCoords.get(4)-640),0-(yCoords.get(4)-400),64,64);
-                            	enemy2 = new Rectangle(0-(xCoords.get(5)-640),0-(yCoords.get(5)-400),64,64);
-                            	enemy3 = new Rectangle(0-(xCoords.get(6)-640),0-(yCoords.get(6)-400),64,64);
-                            	enemy4 = new Rectangle(0-(xCoords.get(7)-640),0-(yCoords.get(7)-400),64,64);
-                            	s1 = false;
-                            }
-                            
-                                if (enemy1.contains(new Point(0-(xCoords.get(ID)-640), 0-(yCoords.get(ID)-400))))
-                                    if (s1)
-                                    	health.set(0,health.get(0) - HEALTH_DROP);
-                                    else
-                                    	health.set(4,health.get(4) - HEALTH_DROP);
-                                if (enemy2.contains(new Point(0-(xCoords.get(ID)-640), 0-(yCoords.get(ID)-400))))
-                                    if (s1)
-                                    	health.set(1,health.get(1) - HEALTH_DROP);
-                                    else
-                                    	health.set(5,health.get(5) - HEALTH_DROP);
-                                if (enemy3.contains(new Point(0-(xCoords.get(ID)-640),0-(yCoords.get(ID)-400))))
-                                    if (s1)
-                                    	health.set(2,health.get(2) - HEALTH_DROP);
-                                    else
-                                    	health.set(6,health.get(6) - HEALTH_DROP);
-                                if (enemy4.contains(new Point(0-(xCoords.get(ID)-640),0-(yCoords.get(ID)-400))))
-                                    if (s1)
-                                    	health.set(3,health.get(3) - HEALTH_DROP);
-                                    else
-                                    	health.set(7,health.get(7) - HEALTH_DROP);
-                                
+                        	if (enemy1.contains(new Point(0-(xCoords.get(ID)-640), 0-(yCoords.get(ID)-400))))
+                        		if (s1)
+                        			health.set(0,health.get(0) - HEALTH_DROP);
+                        		else
+                        			health.set(4,health.get(4) - HEALTH_DROP);
+                        	if (enemy2.contains(new Point(0-(xCoords.get(ID)-640), 0-(yCoords.get(ID)-400))))
+                        		if (s1)
+                        			health.set(1,health.get(1) - HEALTH_DROP);
+                        		else
+                        			health.set(5,health.get(5) - HEALTH_DROP);
+                        	if (enemy3.contains(new Point(0-(xCoords.get(ID)-640),0-(yCoords.get(ID)-400))))
+                        		if (s1)
+                        			health.set(2,health.get(2) - HEALTH_DROP);
+                        		else
+                        			health.set(6,health.get(6) - HEALTH_DROP);
+                        	if (enemy4.contains(new Point(0-(xCoords.get(ID)-640),0-(yCoords.get(ID)-400))))
+                        		if (s1)
+                        			health.set(3,health.get(3) - HEALTH_DROP);
+                        		else
+                        			health.set(7,health.get(7) - HEALTH_DROP);
+
                         } else if (input.equalsIgnoreCase("Respawn")) {
                             Server.getInstance().xCoords.set(THREAD_ID,startPosX[THREAD_ID]);
                             Server.getInstance().yCoords.set(THREAD_ID,startPosY[THREAD_ID]);
