@@ -9,6 +9,7 @@ import javax.print.attribute.standard.MediaSize.Other;
 import com.nexide.main.entities.Player;
 import com.nexide.main.entities.Tile;
 import com.nexide.main.entities.TileManager;
+import com.nexide.main.gfx.ImageManager;
 import com.nexide.main.net.ConnectToServer;
 
 /*
@@ -58,7 +59,7 @@ public class Map {
 		
 		
 		if (oldOffset != yOffset+xOffset)
-			System.out.println("xOff: " + xOffset + ", yOff: " + yOffset + ", x: " + (0 - (xOffset - 640)) + ", y: " + (0 - (yOffset - 400)));
+			//System.out.println("xOff: " + xOffset + ", yOff: " + yOffset + ", x: " + (0 - (xOffset - 640)) + ", y: " + (0 - (yOffset - 400)));
 		
 		//System.out.println("xOff: " + xOffset + ", yOff: " + yOffset);
 		
@@ -123,7 +124,7 @@ public class Map {
 	
 	private String debugOld01 = "void";
 	
-	public void render(Graphics g, Game game, TileManager tm){
+	public void render(Graphics g, Game game, TileManager tm, ImageManager im){
 		if ((TMisInit = !TMisInit))
 			tileMap = convertIntMapToTileMap(intmap, tileMap, tm);
 		for(int i = 0; i<54; i++)
@@ -140,16 +141,29 @@ public class Map {
 				try {
 					ConnectToServer.send("getUserPositions");
 					String UPs = ConnectToServer.receive();
+					ConnectToServer.send("getDirections");
+					String DIRs = ConnectToServer.receive();
 					for(int i = 0; i < UPs.split("&").length; i++) 
 						if (onScreen(UPs.split("&")[i])) {
 							int newX = xOffset - Integer.parseInt(UPs.split("&")[i].split(",")[0]) + 640;
 							int newY = yOffset - Integer.parseInt(UPs.split("&")[i].split(",")[1]) + 400;
-							if (!(ConnectToServer.ID + ": DRAWING @" + UPs.split("&")[i] + " -> " + newX + "," + newY).equals(debugOld01))
-								System.out.println(ConnectToServer.ID + ": DRAWING @" + UPs.split("&")[i] + " -> " + newX + "," + newY);
+							//if (!(ConnectToServer.ID + ": DRAWING @" + UPs.split("&")[i] + " -> " + newX + "," + newY).equals(debugOld01))
+								//System.out.println(ConnectToServer.ID + ": DRAWING @" + UPs.split("&")[i] + " -> " + newX + "," + newY);
 							debugOld01 = ConnectToServer.ID + ": DRAWING @" + UPs.split("&")[i] + " -> " + newX + "," + newY;
 							if (i < 4) g.setColor(Color.BLUE);
 							if (i >= 4) g.setColor(Color.RED);
 							g.fillOval(newX, newY , 64, 64);
+							int sprite = 0;
+							if (Integer.parseInt(DIRs.split("&")[i]) == 0) {
+								sprite = 0; //up
+							} else if (Integer.parseInt(DIRs.split("&")[i]) == 90) {
+								sprite = 3; //right
+							} else if (Integer.parseInt(DIRs.split("&")[i]) == 180) {
+								sprite = 6; //down
+							} else if (Integer.parseInt(DIRs.split("&")[i]) == 270) {
+								sprite = 9; //left
+							}
+							g.drawImage(im.getTileset("playersprites")[sprite],newX,newY,64,64,game);
 						}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
