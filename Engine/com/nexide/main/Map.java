@@ -70,7 +70,7 @@ public class Map {
 			ConnectToServer.send("getHealth");
 			Player.health = Integer.parseInt(ConnectToServer.receive());
 			if (Player.health <= 0)
-				reset(player);
+				respawn();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
