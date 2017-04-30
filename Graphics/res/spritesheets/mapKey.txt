@@ -1,0 +1,81 @@
+Key:
+
+0 - grass (1,1)
+
+1 - rock (9,0)
+
+2 - water (4,3)
+
+3 - sand (6,1)
+
+4 - dark cobble (1,7)
+
+5 - cobble (1,4)
+
+6 - grass>sand top left corner (5,0)
+
+7 - grass>sand top right corner (7,0)
+
+8 - grass>sand bottom left corner (5,2)
+
+9 - grass>sand bottom right corner (7,2)
+
+10 - grass>sand top edge (6,0)
+
+11 - grass>sand bottom edge (6,2)
+
+12 - grass>sand left edge (5,1)
+
+13 - grass>sand right edge (7,1)
+
+14 - grass>sand top left elbow (8,1)
+
+15 - grass>sand top right elbow (9,1)
+
+16 - grass>sand bottom left elbow (8,2)
+
+17 - grass>sand bottom right elbow (9,2)
+
+18 - cobble top left corner (0,3)
+
+19 - cobble top right corner (2,3)
+
+20 - cobble bottom left corner (0,5)
+21 - cobble bottom right corner (2,5)
+
+22 - cobble top edge (1,3)
+
+23 - cobble bottom edge (1,5)
+24 - cobble left edge (0,4)
+
+25 - cobble right edge (2,4)
+26 - cobble top left elbow (3,4)
+
+27 - cobble top right elbow (4,4)
+
+28 - cobble bottom left elbow (3,5)
+
+29 - cobble bottom right elbow (4,5)
+
+30 - dark cobble top left corner (0,6)
+
+31 - dark cobble top right corner (2,6)
+
+32 - dark cobble bottom left corner (0,8)
+
+33 - dark cobble bottom right corner (2,8)
+
+34 - dark cobble top edge (1,6)
+
+35 - dark cobble bottom edge (1,8)
+36 - dark cobble left edge (0,7)
+
+37 - dark cobble right edge (2,7)
+
+38 - dark cobble top left elbow (3,7)
+
+39 - dark cobble top right elbow (4,7)
+
+40 - dark cobble bottom left elbow (3,8)
+
+41 - dark cobble bottom right elbow (4,8)
