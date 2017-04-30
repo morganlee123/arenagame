@@ -13,29 +13,31 @@ public class Player implements Entity {
 	private BufferedImage[] playerSprites;
 	private BufferedImage currentDirection;
 	private int x, y;
-	public static boolean up, left, right, down;
+	public static boolean up, left, right, down, shooting;
 
+	
 	public Player(int x, int y, BufferedImage[] playerSprites){
 		this.playerSprites = playerSprites;
 		this.x = x;
 		this.y = y;
-		
+
 		up = false;
 		down = false;
 		left = false;
 		right = false;
+		shooting = false;
 	}
-	
+
 	public Player(){
-		
+
 	}
 
 	private BufferedImage lastDirection;
-	
+
 	public void tick(){
 		mouseX = MouseInfo.getPointerInfo().getLocation().getX();
 		mouseY = MouseInfo.getPointerInfo().getLocation().getY();
-		
+
 		/*SET PLAYER SPRITE CORRESPONDING TO DIRECTION THEY ARE MOVING*/
 		if(up){
 			currentDirection = playerSprites[0];
@@ -43,12 +45,12 @@ public class Player implements Entity {
 		}else if(down){
 			currentDirection = playerSprites[6];
 			lastDirection = playerSprites[6];
-		}else if(left){
-			currentDirection = playerSprites[9];
-			lastDirection = playerSprites[9];
 		}else if(right){
 			currentDirection = playerSprites[3];
 			lastDirection = playerSprites[3];
+		}else if(left){
+			currentDirection = playerSprites[9];
+			lastDirection = playerSprites[9];
 		}else{
 			currentDirection = lastDirection;
 			if(currentDirection==null){
@@ -56,8 +58,8 @@ public class Player implements Entity {
 			}
 		}
 
-		
-		
+
+
 		//System.out.println(mouseX + ", " + mouseY);
 	}
 
@@ -65,7 +67,7 @@ public class Player implements Entity {
 	public void render(Graphics g, Game game){
 		g.drawImage(currentDirection, x, y, game);
 	}
-	
+
 	public String getCurrentDirection(){
 		if(up)
 			return "up";
@@ -79,7 +81,7 @@ public class Player implements Entity {
 			return "idle";
 		}
 	}
-	
+
 
 }
 

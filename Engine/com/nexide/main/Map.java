@@ -53,9 +53,10 @@ public class Map {
 			xOffset+=xVel;
 		}
 		
+		/*
 		if (oldOffset != yOffset+xOffset)
 			System.out.println("xOff: " + xOffset + ", yOff: " + yOffset + ", x: " + (0 - (xOffset - 640)) + ", y: " + (0 - (yOffset - 400)));
-		
+		*/
 		//System.out.println("xOff: " + xOffset + ", yOff: " + yOffset);
 	}
 
@@ -91,6 +92,14 @@ public class Map {
 		if (tile.isSolid())
 			return false;
 		
+		if(tile == tman.getTiles("grasstile")[9]){
+			xVel = 3;
+			yVel = 3;
+		}else{
+			xVel = 5;
+			yVel = 5;
+		}
+		
 		return true;
 	}
 	
@@ -99,10 +108,10 @@ public class Map {
 			tileMap = convertIntMapToTileMap(intmap, tileMap, tm);
 		for(int i = 0; i<54; i++)
 			for(int z = 0; z<64; z++){
-				if(tileMap[i][z].getImage() == null){
+				/*if(tileMap[i][z].getImage() == null){
 					tileMap[i][z].getAnimation().drawAnimation(g, (z*64)+xOffset, (i*64)+yOffset, 0);
 					tileMap[i][z].getAnimation().runAnimation();
-				}
+				}*/
 				g.drawImage(tileMap[i][z].getImage(), (z*64)+xOffset, (i*64)+yOffset, game);
 			}
 	} 
@@ -237,6 +246,45 @@ public class Map {
 					break;
 				case 41:
 					emptyTileMap[i][z] = tm.getTiles("darkstone")[12];
+					break;
+				case 42: //
+					emptyTileMap[i][z] = tm.getTiles("grasstile")[9];
+					break;
+				case 43: 
+					emptyTileMap[i][z] = tm.getTiles("grasstile")[0];
+					break;
+				case 44:
+					emptyTileMap[i][z] = tm.getTiles("grasstile")[2];
+					break;
+				case 45:
+					emptyTileMap[i][z] = tm.getTiles("grasstile")[6];
+					break;
+				case 46:
+					emptyTileMap[i][z] = tm.getTiles("grasstile")[8];
+					break;
+				case 47:
+					emptyTileMap[i][z] = tm.getTiles("grasstile")[1];
+					break;
+				case 48:
+					emptyTileMap[i][z] = tm.getTiles("grasstile")[7];
+					break;
+				case 49:
+					emptyTileMap[i][z] = tm.getTiles("grasstile")[3];
+					break;
+				case 50:
+					emptyTileMap[i][z] = tm.getTiles("grasstile")[5];
+					break;
+				case 51:
+					emptyTileMap[i][z] = tm.getTiles("grasstile")[10];
+					break;
+				case 52:
+					emptyTileMap[i][z] = tm.getTiles("grasstile")[11];
+					break;
+				case 53:
+					emptyTileMap[i][z] = tm.getTiles("grasstile")[12];
+					break;
+				case 54:
+					emptyTileMap[i][z] = tm.getTiles("grasstile")[13];
 					break;
 					
 				default:

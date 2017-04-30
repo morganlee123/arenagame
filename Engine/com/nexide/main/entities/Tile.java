@@ -43,4 +43,5 @@ public class Tile implements Entity{
 		return isSolid;
 	}
 	
+	
 }

@@ -11,7 +11,7 @@ public class ImageManager {
 	public int DEFAULT_TILESIZE = 16;
 	
 	private BufferedImage[] grasssandTileset = new BufferedImage[13];
-	private BufferedImage[] grassdirtTileset = new BufferedImage[9];
+	private BufferedImage[] grassdirtTileset = new BufferedImage[15];
 	private BufferedImage[] stoneTileset = new BufferedImage[13];
 	private BufferedImage[] miscTileset = new BufferedImage[9];
 	private BufferedImage[] playerSprites = new BufferedImage[12];
@@ -94,6 +94,20 @@ public class ImageManager {
 		grassdirtTileset[8] = ss.crop(2,2, DEFAULT_TILESIZE, DEFAULT_TILESIZE); // bot right
 		grassdirtTileset[8] = createResizedCopy(grassdirtTileset[8], 64 ,64);
 		
+		grassdirtTileset[9] = ss.crop(3, 0, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		grassdirtTileset[9] = createResizedCopy(grassdirtTileset[9], 64, 64);
+		
+		grassdirtTileset[10] = ss.crop(3, 1, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		grassdirtTileset[10] = createResizedCopy(grassdirtTileset[10], 64, 64);
+		
+		grassdirtTileset[11] = ss.crop(4, 1, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		grassdirtTileset[11] = createResizedCopy(grassdirtTileset[11], 64, 64);
+		
+		grassdirtTileset[12] = ss.crop(3, 2, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		grassdirtTileset[12] = createResizedCopy(grassdirtTileset[12], 64, 64);
+		
+		grassdirtTileset[13] = ss.crop(4,2, DEFAULT_TILESIZE, DEFAULT_TILESIZE);
+		grassdirtTileset[13] = createResizedCopy(grassdirtTileset[13], 64, 64);
 		//DARK COBBLE TILESET
 		
 		darkcobbleTileset[0] = ss.crop(0, 6, DEFAULT_TILESIZE, DEFAULT_TILESIZE);

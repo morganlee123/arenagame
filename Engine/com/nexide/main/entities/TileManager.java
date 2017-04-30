@@ -9,7 +9,7 @@ import com.nexide.main.gfx.ImageManager;
 public class TileManager {
 
 	private ImageManager im;
-	private Tile[] grasstiles  = new Tile[12], stonetiles= new Tile[13], sandtiles= new Tile[13], darkcobbletiles= new Tile[13], miscTiles= new Tile[12];
+	private Tile[] grasstiles  = new Tile[14], stonetiles= new Tile[13], sandtiles= new Tile[13], darkcobbletiles= new Tile[13], miscTiles= new Tile[12];
 	private Tile watertile;
 	
 	
@@ -34,6 +34,12 @@ public class TileManager {
 		grasstiles[6] = new Tile(grassdirtTileset[6], false); // GRASS BOT LEFT
 		grasstiles[7] = new Tile(grassdirtTileset[7], false); // GRASS BOT MID
 		grasstiles[8] = new Tile(grassdirtTileset[8], false); // GRASS BOT RIGHT
+		grasstiles[9] = new Tile(grassdirtTileset[9], false); // DIRT
+		
+		grasstiles[10] = new Tile(grassdirtTileset[10], false); // TOP LEFT ELBOW
+		grasstiles[11] = new Tile(grassdirtTileset[11], false); // TOP RIGHT ELBOW
+		grasstiles[12] = new Tile(grassdirtTileset[12], false); // BOT LEFT ELBOW
+		grasstiles[13] = new Tile(grassdirtTileset[13], false); // BOT RIGHT ELBOW
 		
 		stonetiles[0] = new Tile(stoneTileset[0], false); // LIGHT STONE TOP LEFT
 		stonetiles[1] = new Tile(stoneTileset[1], false); // LIGHT STONE TOP MID
@@ -50,7 +56,7 @@ public class TileManager {
 		stonetiles[11] = new Tile(stoneTileset[11], false); // BOT LEFT ELBOW
 		stonetiles[12] = new Tile(stoneTileset[12], false); // BOT RIGHT ELBOW
 		
-		watertile = new Tile(new Animation(10, miscTileset[0], miscTileset[1], miscTileset[2]), true);
+		watertile = new Tile(new Animation(10, miscTileset[0], miscTileset[1], miscTileset[2]), false);
 		
 		sandtiles[0] = new Tile(grasssandTileset[0], false); // TOP LEFT SAND
 		sandtiles[1] = new Tile(grasssandTileset[1], false); // TOP MID SAND
