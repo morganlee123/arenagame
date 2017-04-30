@@ -66,7 +66,7 @@ public class Player implements Entity {
 		} else if (left) {
 			direction = 270;
 		} else if (right) {
-			direction = 360;
+			direction = 90;
 		}
 
 		//System.out.println(mouseX + ", " + mouseY);
