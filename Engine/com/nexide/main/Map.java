@@ -39,7 +39,7 @@ public class Map {
 		
 	}
 	
-	public void tick(Player player){
+	public void tick(Player player, TileManager tman){
 		int oldOffset = yOffset + xOffset;
 		if(player.getCurrentDirection() == "up" && isValidMove(xOffset, yOffset+yVel, tman)){ 
 			yOffset+=yVel;
