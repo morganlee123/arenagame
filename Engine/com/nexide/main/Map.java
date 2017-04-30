@@ -32,8 +32,8 @@ public class Map {
 	public Map(int[][] intmap){
 		this.intmap = intmap;
 
-		xOffset = 120;
-		yOffset = -1275;
+		xOffset = -1344;
+		yOffset = 144;
 		xVel = 5;
 		yVel = 5;
 		
@@ -58,6 +58,19 @@ public class Map {
 			System.out.println("xOff: " + xOffset + ", yOff: " + yOffset + ", x: " + (0 - (xOffset - 640)) + ", y: " + (0 - (yOffset - 400)));
 		*/
 		//System.out.println("xOff: " + xOffset + ", yOff: " + yOffset);
+		
+		try {
+			
+			ConnectToServer.send("sendInput/" + Player.direction + "/" + xOffset + "/" + yOffset + "/" + String.valueOf(Player.shooting) + "/");
+			ConnectToServer.receive();
+			ConnectToServer.send("getHealth");
+			Player.health = Integer.parseInt(ConnectToServer.receive());
+			//if (Player.health <= 0)
+				//reset(player);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private boolean isValidMove(int xCoord, int yCoord, TileManager tman) {
