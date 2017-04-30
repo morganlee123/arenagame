@@ -1,12 +1,15 @@
 package com.nexide.main;
 
+import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayList;
+import java.io.IOException;
+
+import javax.print.attribute.standard.MediaSize.Other;
 
 import com.nexide.main.entities.Player;
 import com.nexide.main.entities.Tile;
 import com.nexide.main.entities.TileManager;
-import com.nexide.main.gfx.Animation;
+import com.nexide.main.net.ConnectToServer;
 
 /*
  * 
@@ -53,10 +56,10 @@ public class Map {
 			xOffset+=xVel;
 		}
 		
-		/*
+		
 		if (oldOffset != yOffset+xOffset)
 			System.out.println("xOff: " + xOffset + ", yOff: " + yOffset + ", x: " + (0 - (xOffset - 640)) + ", y: " + (0 - (yOffset - 400)));
-		*/
+		
 		//System.out.println("xOff: " + xOffset + ", yOff: " + yOffset);
 		
 		try {
@@ -71,6 +74,8 @@ public class Map {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		
 	}
 
 	private boolean isValidMove(int xCoord, int yCoord, TileManager tman) {
@@ -127,7 +132,34 @@ public class Map {
 				}*/
 				g.drawImage(tileMap[i][z].getImage(), (z*64)+xOffset, (i*64)+yOffset, game);
 			}
+		
+		//now we get positions of other players
+		
+				try {
+					ConnectToServer.send("getUserPositions");
+					String UPs = ConnectToServer.receive();
+					for(int i = 0; i < UPs.split("&").length; i++) 
+						if (onScreen(UPs.split("&")[i])) {
+							System.out.println("DRAWONG");
+							if (ConnectToServer.ID < 4) g.setColor(Color.BLUE);
+							if (ConnectToServer.ID >= 4) g.setColor(Color.RED);
+							g.fillOval(0-(Integer.parseInt(UPs.split("&")[i].split(",")[0]) - 640),0-(Integer.parseInt(UPs.split("&")[i].split(",")[1]) - 400) , 64, 64);
+						}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				//now we get positions of bullets
 	} 
+	
+	public boolean onScreen(String coords) {
+		
+		if (Integer.parseInt(coords.split(",")[0]) > xOffset - 640 && Integer.parseInt(coords.split(",")[0]) < xOffset + 640)
+			if (Integer.parseInt(coords.split(",")[1]) > yOffset - 400 && Integer.parseInt(coords.split(",")[1]) < yOffset + 400)
+				return true;
+		return false;		
+	}
 	
 	public Tile[][] convertIntMapToTileMap(int[][] intmap, Tile[][] emptyTileMap, TileManager tm){
 		emptyTileMap = new Tile[54][64];
@@ -137,6 +169,7 @@ public class Map {
 				case 0:
 					emptyTileMap[i][z] = tm.getTiles("grasstile")[4]; 
 					break;
+					
 				case 1:
 					emptyTileMap[i][z] = tm.getTiles("misc")[0];
 					break;
