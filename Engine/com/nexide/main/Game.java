@@ -42,7 +42,7 @@ public class Game extends Canvas implements Runnable {
 	private void init(){
 		loader = new ImageLoader();
 		
-		ss = new SpriteSheet(loader.loadImage("res/spritesheets/spritesheet.png")); 
+		ss = new SpriteSheet(loader.loadImage("/spritesheets/spritesheet.png")); 
 		im = new ImageManager(ss);
 		tm = new TileManager(im);
 		
