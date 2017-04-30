@@ -352,15 +352,32 @@ public class ConnectToServer implements Callable<String> {
                 
                 //1. update the scores
                 
+                  Rectangle leftzone, rightzone, midzone;
+                
+                leftzone = new Rectangle((5*64), (24*64), (10*64), (8*64));
+                midzone = new Rectangle((30*64), (22*64), (6*64), (12*64));
+                rightzone = new Rectangle((51*64),(24*64), (10*64), (8*64));
+                
                 for (int i = 0; i < 4; i++) {
-                    if (yCoords.get(i) < MAX_PT_YCOORD && yCoords.get(i) > MIN_PT_YCOORD)
+                    if (leftzone.contains(new Point(0-(xCoords.get(i)-640), 0-(yCoords.get(i)-400))))
+                        BlueTeamScore++;
+                    if (rightzone.contains(new Point(0-(xCoords.get(i)-640), 0-(yCoords.get(i)-400))))
+                        BlueTeamScore++;
+                    if (midzone.contains(new Point(0-(xCoords.get(i)-640),0-(yCoords.get(i)-400))))
                         BlueTeamScore++;
                 }
                 
                 for (int i = 4; i < 8; i++) {
-                    if (yCoords.get(i) < MAX_PT_YCOORD && yCoords.get(i) > MIN_PT_YCOORD)
+                	if (leftzone.contains(new Point(0-(xCoords.get(i)-640), 0-(yCoords.get(i)-400))))
                         RedTeamScore++;
+                	if (rightzone.contains(new Point(0-(xCoords.get(i)-640), 0-(yCoords.get(i)-400))))
+                		RedTeamScore++;
+                	if (midzone.contains(new Point(0-(xCoords.get(i)-640), 0-(yCoords.get(i)-400))))
+                		RedTeamScore++;
                 }
+
+                System.out.println("Red: " + (RedTeamScore/30) + " Blue: " + (BlueTeamScore/30));
+                
                 
                 //2. update the bullets
                 
