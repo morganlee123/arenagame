@@ -37,8 +37,6 @@ public class Player implements Entity {
 		mouseY = MouseInfo.getPointerInfo().getLocation().getY();
 		
 		/*SET PLAYER SPRITE CORRESPONDING TO DIRECTION THEY ARE MOVING*/
-		
-		
 		if(up){
 			currentDirection = playerSprites[0];
 			lastDirection = playerSprites[0];
