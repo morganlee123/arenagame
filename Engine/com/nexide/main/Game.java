@@ -17,6 +17,7 @@ import com.nexide.main.gfx.ImageLoader;
 import com.nexide.main.gfx.ImageManager;
 import com.nexide.main.gfx.SpriteSheet;
 import com.nexide.main.net.ConnectToServer;
+import com.nexide.main.net.ConnectToServer.Server;
 
 public class Game extends Canvas implements Runnable {
 	
@@ -207,6 +208,7 @@ public class Game extends Canvas implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		g.drawString("Clients Connected: " + Server.getInstance().getUsernames().size(), 1050, 30);
 		
 		//
 		g.dispose();
