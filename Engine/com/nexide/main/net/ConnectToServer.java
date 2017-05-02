@@ -273,7 +273,7 @@ public class ConnectToServer implements Callable<String> {
     }
     
     
-    private static class Server implements Runnable {
+    public static class Server implements Runnable {
         private int port = 4444; //accessed by gsp
         private int tick = -2; //signifies waiting for players
         private static boolean isRunning = false;
@@ -302,6 +302,8 @@ public class ConnectToServer implements Callable<String> {
         public static Server getInstance() {return s;}
         
         public int getServerPort() {return port;}
+        
+        public static ArrayList<String> getUsernames(){return unames;}
         
         public void run() {
             if (isRunning) return;
@@ -334,6 +336,7 @@ public class ConnectToServer implements Callable<String> {
                     ServerLock.unlock();
                     
                     System.out.println("Clients = " + clients.size());
+                    
                 }
                 discThread.stop();
             } catch (IOException e) {
@@ -361,7 +364,7 @@ public class ConnectToServer implements Callable<String> {
                 
                 // 0. update where the player hitboxes are
                 
-                if (ID > 3) {
+                if (ID > 3) { /*TODO: PROBLEM WITH THIS CODE IS THAT IT ONLY MAKES ONE TEAM ATTACKABLE AND THE OTHER CANT BE KILLED*/
                 	enemy1 = new Rectangle(0-(xCoords.get(0)-640),0-(yCoords.get(0)-400),64,64);
                 	enemy2 = new Rectangle(0-(xCoords.get(1)-640),0-(yCoords.get(1)-400),64,64);
                 	enemy3 = new Rectangle(0-(xCoords.get(2)-640),0-(yCoords.get(2)-400),64,64);
