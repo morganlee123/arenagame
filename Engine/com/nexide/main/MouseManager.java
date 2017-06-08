@@ -9,14 +9,11 @@ import com.nexide.main.net.ConnectToServer;
 
 public class MouseManager implements MouseListener {
 
+	private int mouseX, mouseY;
+	
 	public void mouseClicked(MouseEvent e) {
-		try {
-			ConnectToServer.send("Shoot");
-			ConnectToServer.receive();
-		} catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
+		mouseX = e.getX();
+		mouseY = e.getY();
 	}
 
 	public void mouseEntered(MouseEvent e) {
@@ -33,6 +30,14 @@ public class MouseManager implements MouseListener {
 
 	public void mouseReleased(MouseEvent e) {
 		
+	}
+	
+	public int getX(){
+		return mouseX;
+	}
+	
+	public int getY(){
+		return mouseY;
 	}
 
 	

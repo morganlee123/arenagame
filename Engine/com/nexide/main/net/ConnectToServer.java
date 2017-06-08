@@ -26,6 +26,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.nexide.main.entities.Bullet;
+import com.nexide.main.entities.Player;
+
 public class ConnectToServer implements Callable<String> {
     //Each tick, client should... send next movement to server
                                 //get other positions/health from server
@@ -295,7 +298,9 @@ public class ConnectToServer implements Callable<String> {
         private static ArrayList<Bullet> bullets = new ArrayList<Bullet>();
         private static ArrayList<Boolean> shooting = new ArrayList<Boolean>();
         private static ArrayList<Integer> shotTick = new ArrayList<Integer>();
-
+        private static ArrayList<Player> players = new ArrayList<Player>();
+        
+        
         private int BlueTeamScore = 0;
         private int RedTeamScore = 0;
         
@@ -326,6 +331,7 @@ public class ConnectToServer implements Callable<String> {
                     unames.add("<awaiting connection>");
                     xCoords.add(startPosX[clients.size()]);
                     yCoords.add(startPosY[clients.size()]);
+                    players.add(new Player(startPosX[clients.size()], startPosY[clients.size()]));
                     health.add(100);
                     rotation.add(0);
                     shooting.add(false);
@@ -364,18 +370,7 @@ public class ConnectToServer implements Callable<String> {
                 
                 // 0. update where the player hitboxes are
                 
-                if (ID > 3) { /*TODO: PROBLEM WITH THIS CODE IS THAT IT ONLY MAKES ONE TEAM ATTACKABLE AND THE OTHER CANT BE KILLED*/
-                	enemy1 = new Rectangle(0-(xCoords.get(0)-640),0-(yCoords.get(0)-400),64,64);
-                	enemy2 = new Rectangle(0-(xCoords.get(1)-640),0-(yCoords.get(1)-400),64,64);
-                	enemy3 = new Rectangle(0-(xCoords.get(2)-640),0-(yCoords.get(2)-400),64,64);
-                	enemy4 = new Rectangle(0-(xCoords.get(3)-640),0-(yCoords.get(3)-400),64,64);
-                } else {
-                	enemy1 = new Rectangle(0-(xCoords.get(4)-640),0-(yCoords.get(4)-400),64,64);
-                	enemy2 = new Rectangle(0-(xCoords.get(5)-640),0-(yCoords.get(5)-400),64,64);
-                	enemy3 = new Rectangle(0-(xCoords.get(6)-640),0-(yCoords.get(6)-400),64,64);
-                	enemy4 = new Rectangle(0-(xCoords.get(7)-640),0-(yCoords.get(7)-400),64,64);
-                	s1 = false;
-                }
+                
                 
                 //1. update the scores
                 
@@ -402,33 +397,12 @@ public class ConnectToServer implements Callable<String> {
                 
                 //2. update the bullets
                 
-                //lol I never MADE the bullets
-                boolean isShoot = false;
-                for (int i = 0 ; i < shooting.size(); i++)
-                	if (shooting.get(i)) {
-                		bullets.add(new Bullet(xCoords.get(i),yCoords.get(i),rotation.get(i),i));
-                		isShoot = true;
-                	}
-                if (isShoot) {
-                	System.out.println("Someone's shooting");
-                
+                for(Bullet b : bullets){
+                	b.tick();
                 }
-                for(int i = bullets.size() - 1; i >= 0; i--) {
-                    if (bullets.get(i).shouldDispose()) {
-                        bullets.remove(i);
-                        System.out.println("DELETED: BULLET");
-                    }
-                    else {
-                        bullets.get(i).updatePosition();
-                        System.out.println("UPDATED BULLET");
-                    }
-                }
-                if (bullets.size() > 0) System.out.println("updated " + bullets.size() + " bullets");
                 
-                //3. update the health
+                //3. update the player healths
                 
-                for (Bullet bullet : bullets)
-                    bullet.appendHealth();
                     
                 //4. update time
                 
@@ -440,98 +414,6 @@ public class ConnectToServer implements Callable<String> {
                 tick++;
                 if ((tick != 0) && (tick % 120 == 0))
                     System.out.println("Sample frame's FPS: " + 1/(FIN/1000));
-            }
-        }
-        
-        private static class Bullet {
-            private static final int BULLETSPEED = 64 * (400 / TPS); //400 Meters per second = ~13 meters per tick @ 30TPS
-            
-            private double xVelocity;
-            private double yVelocity;
-            private double currentX;
-            private double currentY;
-            private double previousX;
-            private double previousY;
-            private int userID;
-            
-            public Bullet(double startX, double startY, int degreesRotation, int uid) {
-            	System.out.println("CREATED: BULLET");
-                currentX=startX; 
-                currentY=startY;
-                xVelocity = BULLETSPEED*Math.cos(Math.toRadians(degreesRotation));
-                yVelocity = BULLETSPEED*Math.sin(Math.toRadians(degreesRotation));
-                userID = uid;
-            }
-            
-            public void updatePosition() {
-                previousX = currentX;
-                previousY = currentY;
-                currentX += xVelocity;
-                currentY += yVelocity;
-            }
-            
-            public double getX() { return currentX; }
-            public double getY() { return currentY; }
-            
-            public void appendHealth() {
-                for (int i = 0; i < Server.getInstance().xCoords.size(); i++) {
-                    if (inLine(currentX,currentY,previousY,previousX,i)) {
-                        System.out.println("HIT: User = " + Server.getInstance().unames.get(i));
-                        Server.getInstance().health.set(i,Server.getInstance().health.get(i) - HEALTH_DROP);
-                    }
-                }
-            }
-            
-            public boolean shouldDispose() {
-            	System.out.println("448-CTS x: " + currentX + "y: " + currentY);
-                return (currentX > 64*64 || currentX < 0 || currentY > 54*64 || currentY < 0*64);
-            }
-            
-            private static boolean inLine(double x, double y, double oldX, double oldY,int playerID) { //a and b are bullet path, c is player
-               
-            	//1. is the player between the endpoints of the bullets, give or take 32 px.
-            	double smallStartX = x - 32;
-            	double largeStartX = x + 32;
-            	double smallStartY = y - 32;
-            	double largeStartY = y + 32;
-            	double smallEndX = oldX - 32;
-            	double largeEndX = oldX + 32;
-            	double smallEndY = oldY - 32;
-            	double largeEndY = oldY + 32;
-            	if (smallStartY > smallEndY)
-            		smallStartY = smallEndY;
-            	if (smallStartX > smallEndX)
-            		smallStartX = smallEndX;
-            	if (largeStartY < largeEndY)
-            		largeStartY = largeEndY;
-            	if (largeStartX < largeEndX)
-            		largeStartX = largeEndX;
-            	
-            	int playerX = xCoords.get(playerID);
-            	int playerY = yCoords.get(playerID);
-            	
-            	System.out.println(smallStartX + "<" + playerX + "<" + largeStartX);
-            	System.out.println(smallStartY + "<" + playerX + "<" + largeStartY);
-            	
-            	if (smallStartX <= playerX && largeStartX >= playerX && smallStartY <= playerY && largeStartY >= playerY)
-            		return true;
-
-            	return false;
-//            	
-//            	//1. is it between A and B?
-//               if (!((Ax <= Cx && Cx < Bx) || (Ax >= Cx && Cx > Bx))) {
-//                   return false;
-//               }
-//               if (!((Ay <= Cy && Cy < By) || (Ay >= Cy && Cy > By))) {
-//                   return false;
-//               }
-//               
-//               //2. does it have the same slope as A and B?
-//               //   a) Vertical?
-//               if (Ax == Cx) return Bx == Cx;
-//               if (Bx == Cx) return Ax == Cx;
-//               //   b) same slope?
-//               return (Ay - Cy)/(Ax - Cx) == (Cy - By)/(Cx - Bx);
             }
         }
         
@@ -584,28 +466,8 @@ public class ConnectToServer implements Callable<String> {
                         
                         	output = "" + Server.getInstance().tick;
                         } else if (input.equalsIgnoreCase("shoot")) {
-                            
-                        	if (enemy1.contains(new Point(0-(xCoords.get(ID)-640), 0-(yCoords.get(ID)-400))))
-                        		if (s1)
-                        			health.set(0,health.get(0) - HEALTH_DROP);
-                        		else
-                        			health.set(4,health.get(4) - HEALTH_DROP);
-                        	if (enemy2.contains(new Point(0-(xCoords.get(ID)-640), 0-(yCoords.get(ID)-400))))
-                        		if (s1)
-                        			health.set(1,health.get(1) - HEALTH_DROP);
-                        		else
-                        			health.set(5,health.get(5) - HEALTH_DROP);
-                        	if (enemy3.contains(new Point(0-(xCoords.get(ID)-640),0-(yCoords.get(ID)-400))))
-                        		if (s1)
-                        			health.set(2,health.get(2) - HEALTH_DROP);
-                        		else
-                        			health.set(6,health.get(6) - HEALTH_DROP);
-                        	if (enemy4.contains(new Point(0-(xCoords.get(ID)-640),0-(yCoords.get(ID)-400))))
-                        		if (s1)
-                        			health.set(3,health.get(3) - HEALTH_DROP);
-                        		else
-                        			health.set(7,health.get(7) - HEALTH_DROP);
-
+                        	
+                        	
                         } else if (input.equalsIgnoreCase("Respawn")) {
                             Server.getInstance().xCoords.set(THREAD_ID,startPosX[THREAD_ID]);
                             Server.getInstance().yCoords.set(THREAD_ID,startPosY[THREAD_ID]);

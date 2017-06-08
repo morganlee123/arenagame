@@ -28,6 +28,17 @@ public class Player implements Entity {
 		right = false;
 		shooting = false;
 	}
+	
+	public Player(int x, int y){
+		this.x = x;
+		this.y = y;
+		
+		up = false;
+		down = false;
+		left = false;
+		right = false;
+		shooting = false;
+	}
 
 	public Player(){
 
@@ -89,6 +100,14 @@ public class Player implements Entity {
 		else{
 			return "idle";
 		}
+	}
+	
+	public int getX(){
+		return x;
+	}
+	
+	public int getY(){
+		return y;
 	}
 
 
